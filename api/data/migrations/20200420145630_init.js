@@ -61,6 +61,13 @@ exports.up = async function (knex) {
       .inTable("recipes")
       .onDelete("CASCADE")
       .onUpdate("CASCADE");
+    tag_recipe
+      .integer("user_id")
+      .notNullable()
+      .references("id")
+      .inTable("users")
+      .onDelete("CASCADE")
+      .onUpdate("CASCADE");
   });
 };
 
