@@ -1,21 +1,39 @@
 const db = require("../data/dbConfig");
 
 module.exports = {
-  //   getTagsByUser,
-  //   getTruncated,
+  getUniqueUserTags,
+  getTruncated,
   getFull,
+  getStandardTags,
   //   add,
   //   remove,
   //   update,
 };
 
+//exported functions
+async function getUniqueUserTags(userId) {
+  let allUserTags = await getUserTags(userId)
+
+  const uniqueTagSet = new Set()
+  const uniqueTags = []
+
+  for(let index in allUserTags) {
+    let currTag = allUserTags[index]
+    if (!uniqueTagSet.has(currTag["text"])) {
+      uniqueTags.push(currTag)
+      uniqueTagSet.add(currTag["text"])
+    }
+  }
+  return uniqueTags;
+}
+
 async function getTruncated(userId) {
   let truncRecipes = await db("recipes").where({ user_id: userId });
-  let tagSet = new Set();
-  truncRecipes.forEach((recipe) => {
-    // let recipeTags = getRecipeTags(recipe.id)
-    console.log("recipe", recipe);
-  });
+  for (let index in truncRecipes) {
+    const recipeId = truncRecipes[index]["id"];
+    truncRecipes[index]["tags"] = await getRecipeTags(recipeId);
+  }
+  return truncRecipes;
 }
 
 async function getFull(recipeId) {
@@ -23,19 +41,13 @@ async function getFull(recipeId) {
   recipe = recipe[0];
   // console.log('recipe', recipe)
   if (recipe) {
-    const ingredients = await db("ingredients")
-      .join("recipes", "recipes.id", "ingredients.recipe_id")
-      .select("ingredients.text")
-      .where({ "ingredients.recipe_id": recipeId });
+    const ingredients = await getIngredients(recipeId);
     // console.log('ingredients', ingredients)
 
-    const instructions = await db("instructions")
-      .join("recipes", "recipes.id", "instructions.recipe_id")
-      .select("instructions.text", "instructions.order")
-      .where({ "instructions.recipe_id": recipeId });
-    // console.log('instructions', instructions)
+    const instructions = await getInstructions(recipeId);
+    //    console.log('instructions', instructions)
 
-    const tags = getRecipeTags(recipeId)
+    const tags = await getRecipeTags(recipeId);
     // console.log('tags', tags)
 
     recipe["ingredients"] = ingredients;
@@ -43,18 +55,49 @@ async function getFull(recipeId) {
     recipe["tags"] = tags;
 
     // console.log("recipeFull", recipe);
-    return recipe
-
-    } else {
-        return null
+    return recipe;
+  } else {
+    return null;
   }
 }
 
+async function getStandardTags() {
+  const standardTags = await db("tags")
+  .where({ isCustom: false })
+  .select("tags.text")
+  return standardTags;
+}
 
-const getRecipeTags = async (recipeId)=> {
+//helper functions
+
+const getInstructions = async (recipeId) => {
+  let instructions = await db("instructions")
+    .join("recipes", "recipes.id", "instructions.recipe_id")
+    .select("instructions.text", "instructions.order")
+    .where({ "instructions.recipe_id": recipeId });
+  return instructions;
+};
+
+const getIngredients = async (recipeId) => {
+  let ingredients = await db("ingredients")
+    .join("recipes", "recipes.id", "ingredients.recipe_id")
+    .select("ingredients.text")
+    .where({ "ingredients.recipe_id": recipeId });
+  return ingredients;
+};
+
+const getRecipeTags = async (recipeId) => {
   let tags = await db("tags_recipes")
+    .join("tags", "tags.id", "tags_recipes.tag_id")
+    .where({ "tags_recipes.recipe_id": recipeId })
+    .select("tags.text");
+  return tags;
+};
+
+const getUserTags = async (userId)=> {
+  let userTags = await db("tags_recipes")
   .join("tags", "tags.id", "tags_recipes.tag_id")
-  .where({ "tags_recipes.recipe_id": recipeId })
-  .select("tags.text");
-  return tags
+  .select("tags.text", "tags.isCustom")
+  .where({ "tags_recipes.user_id": userId });
+  return userTags
 }
