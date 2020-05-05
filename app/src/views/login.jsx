@@ -1,7 +1,7 @@
 import React from "react";
 import LogInForm from "../components/logInForm"
 
-export default LogIn=()=> {
+const LogIn=()=> {
     return (
         <div>
             <h1>Log In</h1>
@@ -9,3 +9,5 @@ export default LogIn=()=> {
         </div>
     )
 }
+
+export default LogIn

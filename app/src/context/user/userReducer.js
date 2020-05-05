@@ -1,22 +1,23 @@
 export default (state, action) => {
   switch (action.type) {
-    case "FETCH_TRUNC_START":
+    case "FETCH_STATUS_START":
       return {
         ...state,
         loading: true,
         error: null,
       };
-    case "FETCH_TRUNC_SUCCESS":
+    case "FETCH_STATUS_SUCCESS":
       return {
         ...state,
         loading: false,
-        truncatedRecipes: action.payload,
+        userName: action.payload.name,
+        isLoggedIn: action.payload.logInStatus,
       };
-    case "FETCH_TRUNC_FAIL":
+    case "FETCH_STATUS_FAIL":
       return {
         ...state,
         loading: false,
-        error: true,
+        error: action.payload,
       };
   }
 };

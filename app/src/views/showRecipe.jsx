@@ -1,9 +1,11 @@
 import React from "react";
 
-export default ShowRecipe=()=> {
+const ShowRecipe=()=> {
     return (
         <div>
             <h1>ShowRecipe</h1>
         </div>
     )
 }
+
+export default ShowRecipe

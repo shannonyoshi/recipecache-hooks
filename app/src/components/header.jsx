@@ -1,20 +1,21 @@
 import React from "react";
+import {NavLink} from "react-router-dom"
 
-export default Header = () => {
+const Header = () => {
   return (
-    <header className="App-header">
-      <img src={logo} className="App-logo" alt="logo" />
-      <p>
-        Edit <code>src/App.js</code> and save to reload.
-      </p>
-      <a
-        className="App-link"
-        href="https://reactjs.org"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        Learn React
-      </a>
+    <header className="header">
+      {/* need to changes css, in original, this is wrapped in nav, not header tag */}
+        <div className="nav-logo-set">
+          {/* TODO: add logo image here later*/}
+          <p className="nav-title"> Recipe Cache</p>
+        </div>
+
+      <nav className="nav">
+        <NavLink to="/"><button>Home</button></NavLink>
+        <NavLink to="/add-recipe"><button>Add Recipe</button></NavLink>
+      </nav>
     </header>
   );
 };
+
+export default Header

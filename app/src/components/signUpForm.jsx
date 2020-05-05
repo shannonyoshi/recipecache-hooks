@@ -1,11 +1,9 @@
-import React from "react";
+import React, {useState} from "react";
 import { Link } from "react-router-dom";
-import logo from "../assets/secret-cookbook-logo.png";
-import "../less/SignUpForm.less";
 
 const initInputState = {email: "", password1: "", password2: ""};
 
-export default SignUpForm = () => {
+const SignUpForm = () => {
   const [inputs, setInputs] = useState(initInputState);
     const [passwordMatch, setPasswordMatch] = useState(true)
 
@@ -32,7 +30,7 @@ export default SignUpForm = () => {
         <form className="signup-form" onSubmit={handleSubmit}>
           <div className="signup-form-header">
             <div className="signup-logo-wrapper">
-              <img src={logo} alt="logo" className="signup-logo" />
+              {/* TODO: replace logo image  <img src={logo} alt="logo" className="signup-logo" /> */}
             </div>
             <h3>Welcome to</h3>
             <h2>Recipe Cache</h2>
@@ -90,29 +88,31 @@ export default SignUpForm = () => {
   );
 };
 
+export default SignUpForm
 
-signUp = async (e) => {
-  e.preventDefault();
-  const isValid = this.validateInputs();
-  console.log("state", this.state, "isValid", isValid);
-  if (isValid) {
-    const newUser = {
-      email: this.state.email,
-      password: this.state.password1,
-    };
-    await this.props.signUp(newUser, this.props.history);
-    this.setState({
-      email: "",
-      password1: "",
-      password2: "",
-      showErrors: false,
-      passwordError: false,
-      emailError: false,
-    });
-  } else {
-    this.setState({ ...this.state, showErrors: true });
-  }
-};
+
+// signUp = async (e) => {
+//   e.preventDefault();
+//   const isValid = this.validateInputs();
+//   console.log("state", this.state, "isValid", isValid);
+//   if (isValid) {
+//     const newUser = {
+//       email: this.state.email,
+//       password: this.state.password1,
+//     };
+//     await this.props.signUp(newUser, this.props.history);
+//     this.setState({
+//       email: "",
+//       password1: "",
+//       password2: "",
+//       showErrors: false,
+//       passwordError: false,
+//       emailError: false,
+//     });
+//   } else {
+//     this.setState({ ...this.state, showErrors: true });
+//   }
+// };
 
 // const mapStateToProps = state => ({
 //   loading: state.loading,

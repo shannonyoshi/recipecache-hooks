@@ -1,9 +1,14 @@
 import React from "react";
+import RecipeDashboard from "../components/recipeDashboard"
 
-export default Home=()=> {
+const Home=()=> {
     return (
         <div>
             <h1>HOME</h1>
+            <RecipeDashboard/>
+
         </div>
     )
 }
+
+export default Home;

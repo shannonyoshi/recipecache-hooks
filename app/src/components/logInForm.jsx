@@ -1,11 +1,9 @@
 import React, { useState } from "react";
 import { Link} from "react-router-dom";
-import logo from "../assets/secret-cookbook-logo.png";
-import "../less/SignInForm.less";
 
 const initInputState = { email: "", password: "" };
 
-export default LogInForm = () => {
+const LogInForm = () => {
   const [inputs, setInputs] = useState(initInputState);
 
 
@@ -30,7 +28,7 @@ export default LogInForm = () => {
             <form className="login-form" onSubmit={handleSubmit}>
               <div className="login-form-header">
                 <div className="login-logo-wrapper">
-                  <img src={logo} alt="logo" className="login-logo" />
+                  {/* TODO: replace logo image <img src={logo} alt="logo" className="login-logo" /> */}
                 </div>
                 <h3>Log in to</h3>
                 <h2>Recipe Cache</h2>
@@ -67,6 +65,8 @@ export default LogInForm = () => {
     </div>
   );
 };
+
+export default LogInForm
 
 // const mapStateToProps = state => ({
 //   loading: state.loading,
