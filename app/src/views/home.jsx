@@ -1,14 +1,25 @@
 import React from "react";
-import RecipeDashboard from "../components/recipeDashboard"
+import Header from "../components/header";
+import TagSearch from "../components/tagSearch";
+import RecipeDashboard from "../components/recipeDashboard";
 
-const Home=()=> {
-    return (
-        <div>
-            <h1>HOME</h1>
-            <RecipeDashboard/>
+import "../styling/home.scss";
 
-        </div>
-    )
-}
+const Home = (props) => {
+  const { truncRecipes, userTags, selectedTag, setSelectedTag } = props;
+
+  console.log("props", props);
+  return (
+    <div>
+      <Header />
+      <TagSearch
+        userTags={userTags}
+        selectedTag={selectedTag}
+        setSelectedTag={setSelectedTag}
+      />
+      <RecipeDashboard truncRecipes={truncRecipes} selectedTag={selectedTag} />
+    </div>
+  );
+};
 
 export default Home;

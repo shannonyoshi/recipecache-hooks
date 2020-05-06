@@ -1,13 +1,26 @@
-import React from 'react'
+import React from "react";
 
+const TagSearch = (props) => {
+  const { userTags, selectedTag, setSelectedTag } = props;
+  console.log();
+  const selectTag = (e, tag) => {
+    e.preventDefault();
+    setSelectedTag(tag);
+  };
 
-const TagSearch = () => {
   return (
-    <div>
-      <p>Tag Search</p>
+    <div className="search-wrapper">
+      <p>Tag Search:</p>
+      {userTags.map((tag) => (
+        <button
+          className="tag-button"
+          key={`t${tag.id}`}
+          onClick={(e) => selectTag(e, tag)}>
+          {tag.text}
+        </button>
+      ))}
     </div>
-  )
-}
+  );
+};
 
-
-export default TagSearch
+export default TagSearch;

@@ -1,0 +1,58 @@
+@mixin button-mixin(
+  $btn-bg-color: color(dark2),
+  $btn-txt-color: color(light),
+  $btn-width: 80%,
+  $btn-height: auto
+) {
+  font-size: 1em;
+  padding: 0.5em;
+  border-radius: 5px;
+  background-color: $btn-bg-color;
+  color: $btn-txt-color;
+  text-align: center;
+  width: $btn-width;
+  height: $btn-height;
+  border: 0;
+
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  transition: 0.3s;
+
+  &:hover {
+    background-color: color(dark);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.9);
+  }
+}
+
+@mixin form-input {
+  width: 94%;
+  color: darkslategray;
+  padding: 0.5em;
+  border-radius: 5px;
+  border: 2px solid color(light);
+  &:focus {
+    outline: none;
+    border: 2px solid color(medium);
+  }
+}
+
+@mixin tags {
+  border: 1px solid black;
+  padding: 0.2em 0.4em;
+  margin: 0.2em;
+  min-width: 50px;
+  text-align: center;
+  width: auto;
+  background-color: white;
+  // font-weight: bold;
+}
+
+@mixin link-reset {
+  text-decoration: none;
+  outline: none;
+  font-size: 1em;
+  margin: 0.5em 1em;
+}
+
+$phone-breakpoint: 550px;
+$tablet-breakpoint: 850px;

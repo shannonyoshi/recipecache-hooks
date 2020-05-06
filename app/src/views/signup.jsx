@@ -1,13 +1,14 @@
 import React from "react";
-import SignUpForm from "../components/signUpForm"
+import SignUpForm from "../components/signUpForm";
 
-const SignUp=()=> {
-    return (
-        <div>
-            <SignUpForm/>
+import "../styling/signUpForm.scss";
 
-        </div>
-    )
-}
+const SignUp = () => {
+  return (
+    <div>
+      <SignUpForm />
+    </div>
+  );
+};
 
-export default SignUp
+export default SignUp;

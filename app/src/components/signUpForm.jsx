@@ -1,11 +1,16 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
-const initInputState = {email: "", password1: "", password2: ""};
+const initInputState = {
+  userName: "",
+  email: "",
+  password1: "",
+  password2: "",
+};
 
 const SignUpForm = () => {
   const [inputs, setInputs] = useState(initInputState);
-    const [passwordMatch, setPasswordMatch] = useState(true)
+  const [passwordMatch, setPasswordMatch] = useState(true);
 
   const handleChange = (e) => {
     e.persist();
@@ -13,28 +18,36 @@ const SignUpForm = () => {
     setInputs((inputs) => ({ ...inputs, [e.target.name]: e.target.value }));
   };
 
-  const handleSubmit=(e)=> {
-      e.preventDefault()
-      if (inputs.password1===inputs.password2) {
-          setPasswordMatch(true)
-      } else {
-          setPasswordMatch(false)
-          setInputs({...inputs, password2:""})
-      }
-
-  }
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (inputs.password1 === inputs.password2) {
+      setPasswordMatch(true);
+    } else {
+      setPasswordMatch(false);
+      setInputs({ ...inputs, password2: "" });
+    }
+  };
 
   return (
-    <div className="signup-page-wrapper">
-      <div className="signup-form-wrapper">
-        <form className="signup-form" onSubmit={handleSubmit}>
-          <div className="signup-form-header">
-            <div className="signup-logo-wrapper">
-              {/* TODO: replace logo image  <img src={logo} alt="logo" className="signup-logo" /> */}
+    <div className="signUp-page-wrapper">
+      <div className="signUp-form-wrapper">
+        <form className="signUp-form" onSubmit={handleSubmit}>
+          <div className="signUp-form-header">
+            <div className="signUp-logo-wrapper">
+              {/* TODO: replace logo image  <img src={logo} alt="logo" className="signUp-logo" /> */}
             </div>
             <h3>Welcome to</h3>
             <h2>Recipe Cache</h2>
           </div>
+          <p>User Name</p>
+          <input
+            type="text"
+            required
+            name="userName"
+            onChange={handleChange}
+            value={inputs.userName}
+            placeholder="Some Made Up Name"
+          />
           <p>Email</p>
           <input
             type="email"
@@ -42,6 +55,7 @@ const SignUpForm = () => {
             name="email"
             onChange={handleChange}
             value={inputs.email}
+            placeholder="something@probablygmail.com"
           />
           {/* {this.state.showErrors && this.state.validEmail.length > 0 ? (
             <p>{this.state.emailError}</p>
@@ -56,6 +70,7 @@ const SignUpForm = () => {
             onChange={handleChange}
             value={inputs.password1}
             minLength="8"
+            placeholder="Something unforgettable"
           />
           <p>Confirm password</p>
           <input
@@ -65,6 +80,7 @@ const SignUpForm = () => {
             onChange={handleChange}
             value={inputs.password2}
             minLength="8"
+            placeholder="Same unforgettable thing"
           />
           {!passwordMatch ? (
             <p>Your passwords don't match. Please re-enter</p>
@@ -72,12 +88,12 @@ const SignUpForm = () => {
             <></>
           )}
           <br />
-          <button className="signup-btn" type="submit">
+          <button className="signUp-btn" type="submit">
             Sign Up
           </button>
-          <p className="signup-small-font">
+          <p className="signUp-small-font">
             Already a member? Sign in{" "}
-            <Link to="/log-in" className="signup-link">
+            <Link to="/log-in" className="signUp-link">
               here
             </Link>
           </p>
@@ -88,8 +104,7 @@ const SignUpForm = () => {
   );
 };
 
-export default SignUpForm
-
+export default SignUpForm;
 
 // signUp = async (e) => {
 //   e.preventDefault();

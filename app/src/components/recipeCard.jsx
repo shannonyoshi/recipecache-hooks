@@ -1,23 +1,27 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React from "react";
+import { Link } from "react-router-dom";
 
-
-const RecipeCard = () => {
+const RecipeCard = (props) => {
+  const { recipe } = props;
+  console.log("RecipeCard: recipe", recipe);
   // TODO: adjust ID to be actual truncated recipes ID
-  const id = 34
+  const id = 34;
   return (
     <div className="recipe-card">
       <Link to={`/view/${id}`} key={id}>
-        <h3>*Title*</h3>
-        <p>Source: *source*</p>
+        <h3>{recipe.title}</h3>
+        <p>Source: {recipe.source}</p>
         <div className="recipe-card-tags">
-          {/* TODO: map over recipe tags */}
-          <p className="tag">*tag*</p>
+          <span>Tags:</span>
+          {recipe.tags.map((tag) => (
+            <span className="tag" key={`tag${tag.id}`}>
+              {tag.text}
+            </span>
+          ))}
         </div>
       </Link>
-      
     </div>
-  )
-}
+  );
+};
 
-export default RecipeCard
+export default RecipeCard;
