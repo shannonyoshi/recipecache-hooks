@@ -37,7 +37,10 @@
 }
 
 @mixin tags {
-  border: 1px solid black;
+  // border: 1px solid color(dark);
+
+  border: none;
+  box-shadow: inset 0 0 0 1px rgba(28, 154, 164, 0.3);
   padding: 0.2em 0.4em;
   margin: 0.2em;
   min-width: 50px;
@@ -45,6 +48,18 @@
   width: auto;
   background-color: white;
   // font-weight: bold;
+  transition: 0.3s;
+  &:hover {
+    color: darken(color(dark), 10);
+    background-color: color(medium);
+  }
+  &:focus {
+    outline: none;
+  }
+}
+@mixin active-tag {
+  background-color: darken(color(medium), 10);
+  color: darken(color(dark), 10);
 }
 
 @mixin link-reset {
@@ -52,6 +67,12 @@
   outline: none;
   font-size: 1em;
   margin: 0.5em 1em;
+}
+
+@mixin card {
+  background: linear-gradient(lighten(color(light), 5), white);
+  border-radius: 5px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
 }
 
 $phone-breakpoint: 550px;

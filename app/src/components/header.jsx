@@ -1,5 +1,5 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
 
 import "../styling/header.scss";
 
@@ -8,8 +8,10 @@ const Header = () => {
     <header className="header">
       {/* need to changes css, in original, this is wrapped in nav, not header tag */}
       <div className="nav-logo-set">
-        {/* TODO: add logo image here later*/}
-        <p className="nav-title"> Recipe Cache</p>
+        <Link to="/home" className="logo-link">
+          {/* TODO: add logo image here later*/}
+          <p className="nav-title">Recipe Cache</p>
+        </Link>
       </div>
 
       <nav className="nav">

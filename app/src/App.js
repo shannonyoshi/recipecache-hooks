@@ -11,6 +11,15 @@ import { fetchTruncRecipes, fetchUserTags } from "./util/apiFunctions";
 
 const App = () => {
   const allTag = { text: "All", isCustom: 0, id: -1 };
+  const emptyFullRecipe = {
+    id: null,
+    title: "",
+    source: "",
+    notes: "",
+    tags: [],
+    instructions: [],
+    ingredients: [],
+  };
 
   const [userTags, setUserTags] = useState([allTag]);
   const [selectedTag, setSelectedTag] = useState(allTag);
@@ -20,6 +29,7 @@ const App = () => {
     error: null,
   });
   const [truncRecipes, setTruncRecipes] = useState([]);
+  const [fullRecipe, setFullRecipe] = useState(emptyFullRecipe);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -64,9 +74,37 @@ const App = () => {
           path="/sign-up"
           render={(props) => <SignUp {...props} userState={userState} />}
         />
-        <Route path="/view/:id" component={ShowRecipe} />
-        <Route path="/edit/:id" component={RecipeFormView} />
-        <Route path="/add" component={RecipeFormView} />
+        <Route
+          path="/view/:id"
+          render={(props) => (
+            <ShowRecipe
+              {...props}
+              fullRecipe={fullRecipe}
+              setFullRecipe={setFullRecipe}
+            />
+          )}
+        />
+        <Route
+          path="/edit/:id"
+          render={(props) => (
+            <RecipeFormView
+              {...props}
+              fullRecipe={fullRecipe}
+              setFullRecipe={setFullRecipe}
+            />
+          )}
+        />
+        <Route
+          path="/add"
+          render={(props) => (
+            <RecipeFormView
+              {...props}
+              fullRecipe={fullRecipe}
+              setFullRecipe={setFullRecipe}
+              emptyFullRecipe={emptyFullRecipe}
+            />
+          )}
+        />
       </Switch>
     </div>
   );

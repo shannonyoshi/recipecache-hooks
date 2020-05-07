@@ -13,7 +13,9 @@ const TagSearch = (props) => {
       <p>Tag Search:</p>
       {userTags.map((tag) => (
         <button
-          className="tag-button"
+          className={`tag-button ${
+            selectedTag.text === tag.text ? "active-tag" : ""
+          }`}
           key={`t${tag.id}`}
           onClick={(e) => selectTag(e, tag)}>
           {tag.text}

@@ -17,6 +17,7 @@ const Home = (props) => {
         selectedTag={selectedTag}
         setSelectedTag={setSelectedTag}
       />
+      <h1>Your Recipes</h1>
       <RecipeDashboard truncRecipes={truncRecipes} selectedTag={selectedTag} />
     </div>
   );

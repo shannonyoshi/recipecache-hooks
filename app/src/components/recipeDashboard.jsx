@@ -13,8 +13,8 @@ const RecipeDashboard = (props) => {
 
   const filterRecipes = () => {
     console.log("Filter");
-    console.log("selecteTag", selectedTag);
-    if (selectedTag.text === "all") {
+    console.log("selectedTag", selectedTag);
+    if (selectedTag.text === "All") {
       setShowRecipes([...truncRecipes]);
     } else {
       console.log("Else: selectedTag", selectedTag);
@@ -23,7 +23,6 @@ const RecipeDashboard = (props) => {
   console.log("showRecipes", showRecipes);
   return (
     <div className="recipe-cards-wrapper">
-      <p>Dashboard</p>
       {!showRecipes ? (
         <p>Loading Recipes</p>
       ) : (

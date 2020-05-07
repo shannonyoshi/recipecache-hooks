@@ -1,5 +1,3 @@
-import React from "react";
-
 const URL = "http://localhost:8080";
 
 //for now userID is hard-coded as 1
@@ -36,4 +34,19 @@ export const fetchUserTags = async () => {
   }
 };
 
-// TODO: Functions to write: fetchUsedTags, fetchStandardTags, fetchFullRecipe
+export const fetchFullRecipe = async (recipeId) => {
+  try {
+    const response = await fetch(`${URL}/api/recipes/full/${recipeId}`);
+    const jsonResponse = await response.json();
+    if (!response.ok) {
+      console.log("bad response", response);
+    } else {
+      // TODO: adjust what is returned once BE is written
+      return jsonResponse;
+    }
+  } catch (e) {
+    console.log("e", e);
+  }
+};
+
+// TODO: Functions to write: fetchStandardTags
