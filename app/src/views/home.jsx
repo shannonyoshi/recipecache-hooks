@@ -3,7 +3,7 @@ import Header from "../components/header";
 import TagSearch from "../components/tagSearch";
 import RecipeDashboard from "../components/recipeDashboard";
 
-import "../styling/home.scss";
+import "../styling/homeView.scss";
 
 const Home = (props) => {
   const { truncRecipes, userTags, selectedTag, setSelectedTag } = props;

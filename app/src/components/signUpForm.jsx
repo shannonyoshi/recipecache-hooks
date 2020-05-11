@@ -29,77 +29,75 @@ const SignUpForm = () => {
   };
 
   return (
-    <div className="signUp-page-wrapper">
-      <div className="signUp-form-wrapper">
-        <form className="signUp-form" onSubmit={handleSubmit}>
-          <div className="signUp-form-header">
-            <div className="signUp-logo-wrapper">
-              {/* TODO: replace logo image  <img src={logo} alt="logo" className="signUp-logo" /> */}
-            </div>
-            <h3>Welcome to</h3>
-            <h2>Recipe Cache</h2>
+    <div className="signUp-form-wrapper">
+      <form className="signUp-form" onSubmit={handleSubmit}>
+        <div className="signUp-form-header">
+          <div className="signUp-logo-wrapper">
+            {/* TODO: replace logo image  <img src={logo} alt="logo" className="signUp-logo" /> */}
           </div>
-          <p>User Name</p>
-          <input
-            type="text"
-            required
-            name="userName"
-            onChange={handleChange}
-            value={inputs.userName}
-            placeholder="Some Made Up Name"
-          />
-          <p>Email</p>
-          <input
-            type="email"
-            required
-            name="email"
-            onChange={handleChange}
-            value={inputs.email}
-            placeholder="something@probablygmail.com"
-          />
-          {/* {this.state.showErrors && this.state.validEmail.length > 0 ? (
+          <h3>Welcome to</h3>
+          <h2>Recipe Cache</h2>
+        </div>
+        <p>User Name</p>
+        <input
+          type="text"
+          required
+          name="userName"
+          onChange={handleChange}
+          value={inputs.userName}
+          placeholder="Some Made Up Name"
+        />
+        <p>Email</p>
+        <input
+          type="email"
+          required
+          name="email"
+          onChange={handleChange}
+          value={inputs.email}
+          placeholder="something@probablygmail.com"
+        />
+        {/* {this.state.showErrors && this.state.validEmail.length > 0 ? (
             <p>{this.state.emailError}</p>
           ) : (
             ""
           )} */}
-          <p>Create password</p>
-          <input
-            type="password"
-            required
-            name="password1"
-            onChange={handleChange}
-            value={inputs.password1}
-            minLength="8"
-            placeholder="Something unforgettable"
-          />
-          <p>Confirm password</p>
-          <input
-            type="password"
-            required
-            name="password2"
-            onChange={handleChange}
-            value={inputs.password2}
-            minLength="8"
-            placeholder="Same unforgettable thing"
-          />
-          {!passwordMatch ? (
-            <p>Your passwords don't match. Please re-enter</p>
-          ) : (
-            <></>
-          )}
-          <br />
-          <button className="signUp-btn" type="submit">
-            Sign Up
-          </button>
-          <p className="signUp-small-font">
-            Already a member? Sign in{" "}
-            <Link to="/log-in" className="signUp-link">
-              here
-            </Link>
-          </p>
-          {/* {this.props.signUpError ? <p>Error Signing Up</p> : <></>} */}
-        </form>
-      </div>
+        <p>Create password</p>
+        <input
+          type="password"
+          required
+          name="password1"
+          onChange={handleChange}
+          value={inputs.password1}
+          minLength="8"
+          placeholder="Something unforgettable"
+        />
+        <p>Confirm password</p>
+        <input
+          type="password"
+          required
+          name="password2"
+          onChange={handleChange}
+          value={inputs.password2}
+          minLength="8"
+          placeholder="Same unforgettable thing"
+        />
+        {!passwordMatch ? (
+          <p>Your passwords don't match. Please re-enter</p>
+        ) : (
+          <></>
+        )}
+        <br />
+        <button className="signUp-btn" type="submit">
+          Sign Up
+        </button>
+        <p className="signUp-small-font">
+          Already a member? Sign in{" "}
+          <Link to="/log-in" className="signUp-link">
+            here
+          </Link>
+        </p>
+        {/* {this.props.signUpError ? <p>Error Signing Up</p> : <></>} */}
+      </form>
     </div>
   );
 };

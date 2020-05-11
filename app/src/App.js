@@ -9,6 +9,16 @@ import RecipeFormView from "./views/recipeFormView";
 
 import { fetchTruncRecipes, fetchUserTags } from "./util/apiFunctions";
 
+//FontAwesome Set Up
+import { library } from "@fortawesome/fontawesome-svg-core";
+import {
+  faTrashAlt,
+  faEdit,
+  faArrowAltCircleUp,
+  faArrowAltCircleDown,
+} from "@fortawesome/free-solid-svg-icons";
+library.add(faTrashAlt, faEdit, faArrowAltCircleUp, faArrowAltCircleDown);
+
 const App = () => {
   const allTag = { text: "All", isCustom: 0, id: -1 };
   const emptyFullRecipe = {
@@ -42,7 +52,7 @@ const App = () => {
       }
       try {
         let tags = await fetchUserTags();
-        console.log("tags", tags);
+        // console.log("tags", tags);
         setUserTags([allTag, ...tags]);
       } catch (error) {
         console.log("error", error);

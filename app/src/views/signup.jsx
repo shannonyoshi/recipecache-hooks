@@ -1,11 +1,11 @@
 import React from "react";
 import SignUpForm from "../components/signUpForm";
 
-import "../styling/signUpForm.scss";
+import "../styling/signUpView.scss";
 
 const SignUp = () => {
   return (
-    <div>
+    <div className="signUp-page-wrapper">
       <SignUpForm />
     </div>
   );

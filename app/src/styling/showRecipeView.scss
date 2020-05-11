@@ -1,0 +1,9 @@
+@import "variables";
+@import "mixins";
+
+.recipe-wrapper {
+  @include card;
+  padding: 2em;
+  width: 80%;
+  margin: auto;
+}

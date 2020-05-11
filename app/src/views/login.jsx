@@ -1,11 +1,11 @@
 import React from "react";
 import LogInForm from "../components/logInForm";
 
-import "../styling/logInForm.scss";
+import "../styling/logInView.scss";
 
 const LogIn = () => {
   return (
-    <div>
+    <div className="login-page-wrapper">
       <LogInForm />
     </div>
   );

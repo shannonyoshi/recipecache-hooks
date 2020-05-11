@@ -1,5 +1,10 @@
 const URL = "http://localhost:8080";
 
+export const sortInstructions = (instructions) => {
+  instructions.sort((a, b) => (a.order > b.order ? 1 : -1));
+  console.log("sortInstructions instructions", instructions);
+};
+
 //for now userID is hard-coded as 1
 export const fetchTruncRecipes = async () => {
   const response = await fetch(`${URL}/api/recipes/trunc/1`);
@@ -15,7 +20,7 @@ export const fetchTruncRecipes = async () => {
 
 export const fetchUserState = async () => {
   const response = await fetch(`${URL}/api/auth/status`);
-  console.log("response", response);
+  // console.log("response", response);
   if (!response.ok) {
     console.log("bad response", response);
   } else {
@@ -26,7 +31,7 @@ export const fetchUserState = async () => {
 export const fetchUserTags = async () => {
   const response = await fetch(`${URL}/api/recipes/userTags/1`);
   const jsonResponse = await response.json();
-  console.log("jsonResponse", jsonResponse);
+  // console.log("jsonResponse", jsonResponse);
   if (!response.ok) {
     console.log("bad response", response);
   } else {
@@ -35,14 +40,15 @@ export const fetchUserTags = async () => {
 };
 
 export const fetchFullRecipe = async (recipeId) => {
+  console.log("apiFunctions RecipeId", recipeId);
   try {
     const response = await fetch(`${URL}/api/recipes/full/${recipeId}`);
     const jsonResponse = await response.json();
+    // console.log("jsonResponse", jsonResponse);
     if (!response.ok) {
       console.log("bad response", response);
     } else {
-      // TODO: adjust what is returned once BE is written
-      return jsonResponse;
+      return jsonResponse.recipe;
     }
   } catch (e) {
     console.log("e", e);
