@@ -16,8 +16,17 @@ import {
   faEdit,
   faArrowAltCircleUp,
   faArrowAltCircleDown,
+  faPlusCircle,
+  faCheckCircle,
 } from "@fortawesome/free-solid-svg-icons";
-library.add(faTrashAlt, faEdit, faArrowAltCircleUp, faArrowAltCircleDown);
+library.add(
+  faTrashAlt,
+  faEdit,
+  faArrowAltCircleUp,
+  faArrowAltCircleDown,
+  faPlusCircle,
+  faCheckCircle
+);
 
 const App = () => {
   const allTag = { text: "All", isCustom: 0, id: -1 };
@@ -27,8 +36,12 @@ const App = () => {
     source: "",
     notes: "",
     tags: [],
-    instructions: [],
-    ingredients: [],
+    ingredients: [{ text: "" }, { text: "" }, { text: "" }],
+    instructions: [
+      { text: "", order: 1 },
+      { text: "", order: 2 },
+      { text: "", order: 3 },
+    ],
   };
 
   const [userTags, setUserTags] = useState([allTag]);
@@ -52,7 +65,6 @@ const App = () => {
       }
       try {
         let tags = await fetchUserTags();
-        // console.log("tags", tags);
         setUserTags([allTag, ...tags]);
       } catch (error) {
         console.log("error", error);
@@ -101,6 +113,7 @@ const App = () => {
               {...props}
               fullRecipe={fullRecipe}
               setFullRecipe={setFullRecipe}
+              userTags={userTags}
             />
           )}
         />
@@ -112,6 +125,7 @@ const App = () => {
               fullRecipe={fullRecipe}
               setFullRecipe={setFullRecipe}
               emptyFullRecipe={emptyFullRecipe}
+              userTags={userTags}
             />
           )}
         />

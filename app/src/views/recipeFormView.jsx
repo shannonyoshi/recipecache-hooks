@@ -2,13 +2,25 @@ import React, { useEffect, useState } from "react";
 import RecipeForm from "../components/recipeForm";
 import Header from "../components/header";
 
-import { fetchFullRecipe } from "../util/apiFunctions";
+import { fetchFullRecipe, fetchStandardTags } from "../util/apiFunctions";
 
 const RecipeFormView = (props) => {
-  // console.log("Recipe Form View props", props);
-  const { setFullRecipe, fullRecipe, emptyFullRecipe } = props;
+  const { setFullRecipe, fullRecipe, emptyFullRecipe, userTags } = props;
+  const [allTags, setAllTags] = useState([]);
   const page = props.match.path;
   useEffect(() => {
+    if (allTags.length === 0) {
+      const getStandardTags = async () => {
+        const tags = await fetchStandardTags();
+        const mergedTags = [...tags, ...userTags];
+        const uniqueMergedTags = mergedTags.filter(
+          (tag, index) =>
+            mergedTags.indexOf(tag) === index && tag.text !== "All"
+        );
+        setAllTags([...uniqueMergedTags]);
+      };
+      getStandardTags();
+    }
     if (page === "/add") {
       setFullRecipe(emptyFullRecipe);
     } else {
@@ -27,7 +39,12 @@ const RecipeFormView = (props) => {
     <div>
       <Header />
       <h1>Recipe Form View</h1>
-      <RecipeForm fullRecipe={fullRecipe} setFullRecipe={setFullRecipe} />
+      <RecipeForm
+        fullRecipe={fullRecipe}
+        setFullRecipe={setFullRecipe}
+        allTags={allTags}
+        setAllTags={setAllTags}
+      />
     </div>
   );
 };

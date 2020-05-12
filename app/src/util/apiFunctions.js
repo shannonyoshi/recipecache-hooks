@@ -39,6 +39,16 @@ export const fetchUserTags = async () => {
   }
 };
 
+export const fetchStandardTags = async () => {
+  try {
+    const response = await fetch(`${URL}/api/recipes/standardTags`);
+    const jsonResponse = await response.json();
+    return jsonResponse.standardTags;
+  } catch (e) {
+    console.log("e", e);
+  }
+};
+
 export const fetchFullRecipe = async (recipeId) => {
   console.log("apiFunctions RecipeId", recipeId);
   try {

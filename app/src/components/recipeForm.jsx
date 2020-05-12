@@ -1,30 +1,20 @@
 import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-// import { faStarAndCrescent } from "@fortawesome/free-solid-svg-icons";
 import { sortInstructions } from "../util/apiFunctions";
 
 const RecipeForm = (props) => {
-  const { setFullRecipe, fullRecipe, isEdit } = props;
-  // console.log("props", props);
-  // console.log("fullRecipe", fullRecipe);
+  const { setFullRecipe, fullRecipe, allTags, setAllTags } = props;
+  const [customTag, setCustomTag] = useState("");
   const handleChange = (e, index = null) => {
     e.persist();
-    // console.log("handleChange e.target", e.target);
-
-    if (index === null) {
-      setFullRecipe((fullRecipe) => ({
-        ...fullRecipe,
-        [e.target.name]: e.target.value,
-      }));
-    } else {
-      const names = e.target.name.split(" ");
-      let array = fullRecipe[names[0]];
-      array[index][names[1]] = e.target.value;
-      setFullRecipe((fullRecipe) => ({
-        ...fullRecipe,
-        [names[0]]: [...array],
-      }));
-    }
+    const names = e.target.name.split(" ");
+    let array = fullRecipe[names[0]];
+    array[index][names[1]] = e.target.value;
+    setFullRecipe((fullRecipe) => ({
+      ...fullRecipe,
+      [names[0]]: [...array],
+    }));
+    // }
   };
 
   const handleSubmit = (e) => {
@@ -33,7 +23,6 @@ const RecipeForm = (props) => {
   };
 
   const moveInstruction = (e, change, curPos) => {
-    e.persist();
     let instructions = fullRecipe.instructions;
     let updatedInstr = [];
     if (change === "up") {
@@ -69,6 +58,48 @@ const RecipeForm = (props) => {
     sortInstructions(updatedInstr);
     setFullRecipe({ ...fullRecipe, instructions: [...updatedInstr] });
   };
+  const addIngredient = () => {
+    const emptyIngredient = { text: "" };
+    setFullRecipe({
+      ...fullRecipe,
+      ingredients: [...fullRecipe.ingredients, emptyIngredient],
+    });
+  };
+
+  const addInstruction = () => {
+    const emptyInstruction = {
+      text: "",
+      order: fullRecipe.instructions.length + 1,
+    };
+    console.log("emptyInstruction", emptyInstruction);
+    setFullRecipe({
+      ...fullRecipe,
+      instructions: [...fullRecipe.instructions, emptyInstruction],
+    });
+  };
+  const tagToggle = (tag) => {
+    console.log("tagToggle");
+    let currentTags = fullRecipe.tags;
+    const indexToRemove = currentTags.findIndex(
+      (thisTag) => thisTag.text == tag.text
+    );
+    console.log("indexToRemove", indexToRemove);
+    if (indexToRemove != -1) {
+      currentTags.splice(indexToRemove, 1);
+    } else {
+      currentTags.push(tag);
+    }
+    setFullRecipe({ ...fullRecipe, tags: currentTags });
+  };
+
+  const createCustomTag = () => {
+    if (customTag.length > 0) {
+      const newTag = { text: customTag };
+      setFullRecipe({ ...fullRecipe, tags: [fullRecipe.tags, newTag] });
+      setAllTags([...allTags, newTag]);
+      setCustomTag("");
+    }
+  };
 
   return (
     <div className="form-wrapper" onSubmit={handleSubmit}>
@@ -79,14 +110,18 @@ const RecipeForm = (props) => {
           type="text"
           required
           name="title"
-          onChange={handleChange}
+          onChange={(e) =>
+            setFullRecipe({ ...fullRecipe, title: e.target.value })
+          }
           value={fullRecipe.title}
         />
         <label>Source</label>
         <input
           type="text"
           name="source"
-          onChange={handleChange}
+          onChange={(e) =>
+            setFullRecipe({ ...fullRecipe, source: e.target.value })
+          }
           value={fullRecipe.source}
         />
         <label>Ingredients</label>
@@ -100,25 +135,22 @@ const RecipeForm = (props) => {
                 value={ingredient.text}
                 id={ingredient.id}
                 onChange={(e) => handleChange(e, index)}
+                placeholder="3 cups flour"
               />
             ))}
           </div>
         ) : (
           <input type="text" name="ingredient" />
         )}
+        <button onClick={addIngredient} type="button">
+          <FontAwesomeIcon icon="plus-circle" />
+        </button>
         <label>Instructions</label>
 
         {fullRecipe.instructions.length > 0 ? (
           <div className="instruction list">
             {fullRecipe.instructions.map((instruction, index) => (
-              <>
-                {/* <input
-                  key={`inst O ${index}`}
-                  type="number"
-                  name="instructions order"
-                  value={instruction.order}
-                  onChange={(e) => handleArrayChange(e, index)}
-                /> */}
+              <div className="instruction">
                 <span>{instruction.order}</span>
                 <input
                   key={`inst T ${index}`}
@@ -126,12 +158,12 @@ const RecipeForm = (props) => {
                   name="instructions text"
                   value={instruction.text}
                   onChange={(e) => handleChange(e, index)}
+                  placeholder="Do something"
                 />
                 {index != 0 ? (
                   <button
-                    onClick={(e) =>
-                      moveInstruction(e, "up", instruction.order)
-                    }>
+                    onClick={(e) => moveInstruction(e, "up", instruction.order)}
+                    type="button">
                     <FontAwesomeIcon icon="arrow-alt-circle-up" />
                   </button>
                 ) : null}
@@ -139,16 +171,42 @@ const RecipeForm = (props) => {
                   <button
                     onClick={(e) =>
                       moveInstruction(e, "down", instruction.order)
-                    }>
+                    }
+                    type="button">
                     <FontAwesomeIcon icon="arrow-alt-circle-down" />
                   </button>
                 ) : null}
-              </>
+              </div>
             ))}
+            <button onClick={addInstruction} type="button">
+              <FontAwesomeIcon icon="plus-circle" />
+            </button>
           </div>
         ) : null}
 
         <label>Tags</label>
+        {allTags.map((tag) => (
+          <button
+            type="button"
+            className={`tag-button ${
+              fullRecipe.tags.some((thisTag) => thisTag.text == tag.text)
+                ? "active"
+                : ""
+            }`}
+            onClick={() => tagToggle(tag)}>
+            {tag.text}
+          </button>
+        ))}
+        <input
+          type="text"
+          name="custom"
+          value={customTag}
+          onChange={(e) => setCustomTag(e.target.value)}
+          placeholder="custom tag"
+        />
+        <button type="button" onClick={createCustomTag}>
+          <FontAwesomeIcon icon="check-circle" />
+        </button>
         <label>Notes</label>
       </form>
     </div>
