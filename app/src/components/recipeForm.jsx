@@ -3,7 +3,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { sortInstructions } from "../util/apiFunctions";
 
 const RecipeForm = (props) => {
-  const { setFullRecipe, fullRecipe, allTags, setAllTags } = props;
+  const { setFullRecipe, fullRecipe, allTags, setAllTags, page } = props;
+
   const [customTag, setCustomTag] = useState("");
   const handleChange = (e, index = null) => {
     e.persist();
@@ -207,7 +208,19 @@ const RecipeForm = (props) => {
         <button type="button" onClick={createCustomTag}>
           <FontAwesomeIcon icon="check-circle" />
         </button>
-        <label>Notes</label>
+        <label>Note</label>
+        <textarea
+          type="text"
+          name="notes"
+          value={fullRecipe.notes}
+          placeholder="note"
+          onChange={(e) =>
+            setFullRecipe({ ...fullRecipe, notes: e.target.value })
+          }
+        />
+        <button type="submit">
+          {page == "/add" ? "Create" : "Save"} Recipe
+        </button>
       </form>
     </div>
   );

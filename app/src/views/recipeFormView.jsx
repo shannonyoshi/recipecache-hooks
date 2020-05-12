@@ -44,6 +44,7 @@ const RecipeFormView = (props) => {
         setFullRecipe={setFullRecipe}
         allTags={allTags}
         setAllTags={setAllTags}
+        page={page}
       />
     </div>
   );
