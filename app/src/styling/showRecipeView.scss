@@ -2,8 +2,5 @@
 @import "mixins";
 
 .recipe-wrapper {
-  @include card;
-  padding: 2em;
-  width: 80%;
-  margin: auto;
+  @include full-page-card;
 }

@@ -2,7 +2,8 @@
   $btn-bg-color: color(dark2),
   $btn-txt-color: color(light),
   $btn-width: 80%,
-  $btn-height: auto
+  $btn-height: auto,
+  $btn-margin: auto
 ) {
   font-size: 1em;
   padding: 0.5em;
@@ -13,6 +14,7 @@
   width: $btn-width;
   height: $btn-height;
   border: 0;
+  margin: $btn-margin;
 
   box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.3);
   cursor: pointer;
@@ -24,15 +26,19 @@
   }
 }
 
-@mixin form-input {
-  width: 94%;
+@mixin form-input($ipt-width: 94%, $ipt-padding: 0.5em, $ipt-margin: auto) {
+  width: $ipt-width;
   color: darkslategray;
-  padding: 0.5em;
+  padding: $ipt-padding;
   border-radius: 5px;
-  border: 2px solid color(light);
+  border: 2px solid darken(color(light), 10);
+  margin: $ipt-margin;
   &:focus {
     outline: none;
     border: 2px solid color(medium);
+  }
+  ::placeholder {
+    color: color(medium);
   }
 }
 
@@ -73,6 +79,14 @@
   background: linear-gradient(lighten(color(light), 5), white);
   border-radius: 5px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+}
+
+@mixin full-page-card {
+  @include card;
+  padding: 2em;
+  widows: 80%;
+  margin: auto;
+  text-align: left;
 }
 
 $phone-breakpoint: 550px;

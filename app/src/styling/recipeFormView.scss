@@ -1,0 +1,86 @@
+@import "variables";
+@import "mixins";
+
+.form-wrapper {
+  width: 85%;
+  @include full-page-card;
+  display: inline-block;
+  section {
+    margin-bottom: 2em;
+  }
+
+  label {
+    display: block;
+    color: color(dark);
+    font-weight: bold;
+    width: 100%;
+  }
+  input {
+    @include form-input($ipt-margin: 1em 0);
+  }
+
+  .icon-button {
+    border: none;
+    text-decoration: none;
+    background: transparent;
+    font-size: 1em;
+    .icon {
+      color: darken(color(medium), 10);
+      transition: 0.3s;
+      &:hover {
+        color: color(dark);
+      }
+    }
+    .medium {
+      font-size: 1.5em;
+    }
+    .large {
+      font-size: 2em;
+      text-align: right;
+    }
+  }
+
+  .instructions-section {
+    .instruction {
+      display: flex;
+
+      flex-wrap: wrap;
+      align-items: center;
+      span {
+        color: color(dark);
+      }
+      textarea {
+        @include form-input($ipt-width: 80%, $ipt-margin: 1em 0);
+      }
+    }
+  }
+  .tags {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    align-items: center;
+    .active {
+      @include active-tag;
+    }
+    .custom-tag {
+      margin-top: 0.5em;
+      display: flex;
+      flex-wrap: no-wrap;
+      align-items: center;
+      .tag-input {
+        width: 20ch;
+        max-width: 70%;
+        margin: 0;
+      }
+    }
+  }
+  .note-section {
+    textarea {
+      @include form-input($ipt-margin: 1em 0);
+    }
+  }
+
+  .submit-button {
+    @include button-mixin($btn-height: 3em, $btn-margin: 0 10%);
+  }
+}

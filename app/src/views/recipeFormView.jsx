@@ -4,6 +4,8 @@ import Header from "../components/header";
 
 import { fetchFullRecipe, fetchStandardTags } from "../util/apiFunctions";
 
+import "../styling/recipeFormView.scss";
+
 const RecipeFormView = (props) => {
   const { setFullRecipe, fullRecipe, emptyFullRecipe, userTags } = props;
   const [allTags, setAllTags] = useState([]);
@@ -38,7 +40,7 @@ const RecipeFormView = (props) => {
   return (
     <div>
       <Header />
-      <h1>Recipe Form View</h1>
+      {page == "/add" ? <h1>Add Recipe</h1> : <h1>Edit Recipe</h1>}
       <RecipeForm
         fullRecipe={fullRecipe}
         setFullRecipe={setFullRecipe}

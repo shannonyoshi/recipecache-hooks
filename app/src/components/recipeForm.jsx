@@ -103,122 +103,159 @@ const RecipeForm = (props) => {
   };
 
   return (
-    <div className="form-wrapper" onSubmit={handleSubmit}>
-      <p>Recipe Form</p>
-      <form className="recipe-form">
-        <label>Title</label>
-        <input
-          type="text"
-          required
-          name="title"
-          onChange={(e) =>
-            setFullRecipe({ ...fullRecipe, title: e.target.value })
-          }
-          value={fullRecipe.title}
-        />
-        <label>Source</label>
-        <input
-          type="text"
-          name="source"
-          onChange={(e) =>
-            setFullRecipe({ ...fullRecipe, source: e.target.value })
-          }
-          value={fullRecipe.source}
-        />
-        <label>Ingredients</label>
-        {fullRecipe.ingredients.length > 0 ? (
-          <div className="ingredient list">
-            {fullRecipe.ingredients.map((ingredient, index) => (
-              <input
-                key={`ingredient ${index}`}
-                type="text"
-                name="ingredients text"
-                value={ingredient.text}
-                id={ingredient.id}
-                onChange={(e) => handleChange(e, index)}
-                placeholder="3 cups flour"
-              />
-            ))}
-          </div>
-        ) : (
-          <input type="text" name="ingredient" />
-        )}
-        <button onClick={addIngredient} type="button">
-          <FontAwesomeIcon icon="plus-circle" />
-        </button>
-        <label>Instructions</label>
-
-        {fullRecipe.instructions.length > 0 ? (
-          <div className="instruction list">
-            {fullRecipe.instructions.map((instruction, index) => (
-              <div className="instruction">
-                <span>{instruction.order}</span>
+    <div className="form-wrapper">
+      <form className="recipe-form" onSubmit={handleSubmit} autoComplete="off">
+        <section className="title-section">
+          <label>Title</label>
+          <input
+            type="text"
+            required
+            name="title"
+            onChange={(e) =>
+              setFullRecipe({ ...fullRecipe, title: e.target.value })
+            }
+            value={fullRecipe.title}
+            placeholder="Best Pancakes Ever"
+          />
+        </section>
+        <section className="source-section">
+          <label>Source</label>
+          <input
+            type="text"
+            name="source"
+            onChange={(e) =>
+              setFullRecipe({ ...fullRecipe, source: e.target.value })
+            }
+            value={fullRecipe.source}
+            placeholder="Gourmet Magazine"
+          />
+          {/* </div> */}
+        </section>
+        <section className="ingredients">
+          <label>Ingredients</label>
+          {fullRecipe.ingredients.length > 0 ? (
+            <div className="ingredient list">
+              {fullRecipe.ingredients.map((ingredient, index) => (
                 <input
-                  key={`inst T ${index}`}
+                  key={`ingredient ${index}`}
                   type="text"
-                  name="instructions text"
-                  value={instruction.text}
+                  name="ingredients text"
+                  value={ingredient.text}
+                  id={ingredient.id}
                   onChange={(e) => handleChange(e, index)}
-                  placeholder="Do something"
+                  placeholder="3 cups flour"
                 />
-                {index != 0 ? (
-                  <button
-                    onClick={(e) => moveInstruction(e, "up", instruction.order)}
-                    type="button">
-                    <FontAwesomeIcon icon="arrow-alt-circle-up" />
-                  </button>
-                ) : null}
-                {index != fullRecipe.instructions.length - 1 ? (
-                  <button
-                    onClick={(e) =>
-                      moveInstruction(e, "down", instruction.order)
-                    }
-                    type="button">
-                    <FontAwesomeIcon icon="arrow-alt-circle-down" />
-                  </button>
-                ) : null}
-              </div>
-            ))}
-            <button onClick={addInstruction} type="button">
-              <FontAwesomeIcon icon="plus-circle" />
-            </button>
-          </div>
-        ) : null}
-
-        <label>Tags</label>
-        {allTags.map((tag) => (
+              ))}
+            </div>
+          ) : null}
           <button
+            onClick={addIngredient}
             type="button"
-            className={`tag-button ${
-              fullRecipe.tags.some((thisTag) => thisTag.text == tag.text)
-                ? "active"
-                : ""
-            }`}
-            onClick={() => tagToggle(tag)}>
-            {tag.text}
+            className="icon-button ">
+            <FontAwesomeIcon icon="plus-circle" className="icon large" />
           </button>
-        ))}
-        <input
-          type="text"
-          name="custom"
-          value={customTag}
-          onChange={(e) => setCustomTag(e.target.value)}
-          placeholder="custom tag"
-        />
-        <button type="button" onClick={createCustomTag}>
-          <FontAwesomeIcon icon="check-circle" />
-        </button>
-        <label>Note</label>
-        <textarea
-          type="text"
-          name="notes"
-          value={fullRecipe.notes}
-          placeholder="note"
-          onChange={(e) =>
-            setFullRecipe({ ...fullRecipe, notes: e.target.value })
-          }
-        />
-        <button type="submit">
+        </section>
+        <section className="instructions-section">
+          <label>Instructions</label>
+
+          {fullRecipe.instructions.length > 0 ? (
+            <div className="instruction-list">
+              {fullRecipe.instructions.map((instruction, index) => (
+                <div className="instruction">
+                  <span>{instruction.order}. </span>
+                  <textarea
+                    key={`inst T ${index}`}
+                    type="text"
+                    name="instructions text"
+                    value={instruction.text}
+                    onChange={(e) => handleChange(e, index)}
+                    placeholder="Do something"
+                    className="instruction-input"
+                  />
+                  {index != 0 ? (
+                    <button
+                      onClick={(e) =>
+                        moveInstruction(e, "up", instruction.order)
+                      }
+                      type="button"
+                      className="icon-button">
+                      <FontAwesomeIcon
+                        icon="arrow-alt-circle-up"
+                        className="icon"
+                      />
+                    </button>
+                  ) : null}
+                  {index != fullRecipe.instructions.length - 1 ? (
+                    <button
+                      onClick={(e) =>
+                        moveInstruction(e, "down", instruction.order)
+                      }
+                      type="button"
+                      className="icon-button">
+                      <FontAwesomeIcon
+                        icon="arrow-alt-circle-down"
+                        className="icon"
+                      />
+                    </button>
+                  ) : null}
+                </div>
+              ))}
+              <button
+                onClick={addInstruction}
+                type="button"
+                className="icon-button">
+                <FontAwesomeIcon icon="plus-circle" className="icon large" />
+              </button>
+            </div>
+          ) : null}
+        </section>
+        <section className="tag-section">
+          <label>Tags</label>
+          <div className="tags">
+            {allTags.map((tag) => (
+              <button
+                type="button"
+                className={`tag-button ${
+                  fullRecipe.tags.some((thisTag) => thisTag.text == tag.text)
+                    ? "active"
+                    : ""
+                }`}
+                onClick={() => tagToggle(tag)}>
+                {tag.text}
+              </button>
+            ))}
+
+            <div className="custom-tag">
+              <input
+                type="text"
+                name="custom"
+                value={customTag}
+                onChange={(e) => setCustomTag(e.target.value)}
+                placeholder="custom tag"
+                className="tag-input"
+              />
+              <button
+                type="button"
+                onClick={createCustomTag}
+                className="icon-button">
+                <FontAwesomeIcon icon="check-circle" className="icon medium" />
+              </button>
+            </div>
+          </div>
+        </section>
+        <section className="note-section">
+          <label>Note</label>
+          <textarea
+            type="text"
+            name="notes"
+            value={fullRecipe.notes}
+            placeholder="note"
+            onChange={(e) =>
+              setFullRecipe({ ...fullRecipe, notes: e.target.value })
+            }
+          />
+        </section>
+        <button type="submit" className="submit-button">
           {page == "/add" ? "Create" : "Save"} Recipe
         </button>
       </form>
