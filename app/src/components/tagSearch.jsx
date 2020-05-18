@@ -7,6 +7,7 @@ const TagSearch = (props) => {
     e.preventDefault();
     setSelectedTag(tag);
   };
+  //TODO: add ability to delete/edit tags
 
   return (
     <div className="search-wrapper">

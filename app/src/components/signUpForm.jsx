@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
+import { postUser } from "../util/apiFunctions";
+
 const initInputState = {
-  userName: "",
   email: "",
   password1: "",
   password2: "",
@@ -14,7 +15,6 @@ const SignUpForm = () => {
 
   const handleChange = (e) => {
     e.persist();
-    // console.log("event.target", e.target, "event.target.value",e.target.value)
     setInputs((inputs) => ({ ...inputs, [e.target.name]: e.target.value }));
   };
 
@@ -22,6 +22,11 @@ const SignUpForm = () => {
     e.preventDefault();
     if (inputs.password1 === inputs.password2) {
       setPasswordMatch(true);
+      const newUser = {
+        email: inputs.email,
+        password: password1,
+      };
+      postUser(newUser);
     } else {
       setPasswordMatch(false);
       setInputs({ ...inputs, password2: "" });
@@ -38,15 +43,6 @@ const SignUpForm = () => {
           <h3>Welcome to</h3>
           <h2>Recipe Cache</h2>
         </div>
-        <p>User Name</p>
-        <input
-          type="text"
-          required
-          name="userName"
-          onChange={handleChange}
-          value={inputs.userName}
-          placeholder="Some Made Up Name"
-        />
         <p>Email</p>
         <input
           type="email"

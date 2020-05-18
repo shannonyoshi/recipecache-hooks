@@ -65,4 +65,32 @@ export const fetchFullRecipe = async (recipeId) => {
   }
 };
 
-// TODO: Functions to write: fetchStandardTags
+export const postPutRecipe = async (recipe) => {
+  console.log(recipe);
+  const jsonRecipe = JSON.stringify(recipe);
+  console.log("jsonRecipe", jsonRecipe);
+  try {
+    const response = await fetch(`${URL}/api/recipes/add-or-edit`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: jsonRecipe,
+    });
+  } catch (e) {
+    console.log("e", e);
+  }
+};
+
+export const postUser = async (user) => {
+  const jsonUser = JSON.stringify(user);
+  try {
+    const response = await fetch(`${URL}/api/auth/register`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: jsonUser,
+    });
+  } catch (e) {
+    console.log("e", e);
+  }
+};
+
+// TODO: Functions to write:

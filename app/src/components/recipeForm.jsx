@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { sortInstructions } from "../util/apiFunctions";
+import { sortInstructions, postPutRecipe } from "../util/apiFunctions";
 
 const RecipeForm = (props) => {
   const { setFullRecipe, fullRecipe, allTags, setAllTags, page } = props;
@@ -20,6 +20,7 @@ const RecipeForm = (props) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    postPutRecipe(fullRecipe);
     //TODO: finish this function
   };
 
@@ -96,7 +97,7 @@ const RecipeForm = (props) => {
   const createCustomTag = () => {
     if (customTag.length > 0) {
       const newTag = { text: customTag };
-      setFullRecipe({ ...fullRecipe, tags: [fullRecipe.tags, newTag] });
+      setFullRecipe({ ...fullRecipe, tags: [...fullRecipe.tags, newTag] });
       setAllTags([...allTags, newTag]);
       setCustomTag("");
     }
