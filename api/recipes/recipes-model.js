@@ -10,6 +10,33 @@ module.exports = {
   //   update,
 };
 
+// TODO: functions to write:
+/*    
+
+  addRecipe: 
+    addTruncRecipe, 
+    addIngredient, 
+    addInstruction, 
+    addCustomTag
+
+  updateRecipe:
+    updateTruncRecipe,
+    updateIngredient, 
+    updateInstruction, 
+    updateTag_Recipe,
+
+
+  deleteRecipe:
+    deleteTruncRecipe,
+    deleteIngredient, 
+    deleteInstruction
+  
+  deleteCustomTag,
+  updateCustomTag
+
+
+*/
+
 //exported functions
 async function getUniqueUserTags(userId) {
   let allUserTags = await getUserTags(userId);
@@ -64,7 +91,7 @@ async function getFull(recipeId) {
 async function getStandardTags() {
   const standardTags = await db("tags")
     .where({ isCustom: false })
-    .select("tags.text", "tags.id");
+    .select("tags.text", "tags.id", "tags.isCustom");
   return standardTags;
 }
 
@@ -90,7 +117,7 @@ const getRecipeTags = async (recipeId) => {
   let tags = await db("tags_recipes")
     .join("tags", "tags.id", "tags_recipes.tag_id")
     .where({ "tags_recipes.recipe_id": recipeId })
-    .select("tags.text", "tags.id");
+    .select("tags.text", "tags.id", "tags.isCustom");
   return tags;
 };
 

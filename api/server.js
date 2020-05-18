@@ -5,7 +5,7 @@ const cors = require("cors");
 const helmet = require("helmet");
 const redisStore = require("connect-redis")(session);
 
-// const authRouter = require('./api/auth/auth-router.js');
+const authRouter = require("./auth/auth-router");
 const recipesRouter = require("./recipes/recipes-router");
 
 const server = express();
@@ -33,7 +33,7 @@ server.use(express.json());
 //   })
 // );
 
-// server.use('/api/auth', authRouter);
+server.use("/api/auth", authRouter);
 
 server.use("/api/recipes", recipesRouter);
 

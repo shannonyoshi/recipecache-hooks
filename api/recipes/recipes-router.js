@@ -1,4 +1,5 @@
 const router = require("express").Router();
+
 const Recipes = require("./recipes-model");
 
 /* Endpoints: 
@@ -80,7 +81,14 @@ router.get("/standardTags", async (req, res) => {
 });
 
 router.post("/add-or-edit", async (req, res) => {
+  console.log("req", req);
   const fullRecipe = req.body;
+  if (fullRecipe.id) {
+    // const truncRecipe = {};
+    //TODO: put request
+  } else {
+    //TODO: post request
+  }
   console.log("fullRecipe", fullRecipe);
 });
 
