@@ -9,7 +9,7 @@ x      GET /standardTags      gets list of standard tags
       POST /add              adds new recipe(truncated, ingredients, instructions, tags, tags_recipes)
       PUT /update            updates existing recipe
 */
-
+//TODO: once redis is set up, update userId endpoints to use cookies instead of param
 router.get("/full/:recipeId", async (req, res) => {
   console.log("GET FULL RECIPE");
   const recipeId = req.params.recipeId;
@@ -33,7 +33,7 @@ router.get("/full/:recipeId", async (req, res) => {
 
 router.get("/trunc/:userId", async (req, res) => {
   const userId = req.params.userId;
-  let truncatedRecipes = null
+  let truncatedRecipes = null;
   try {
     truncatedRecipes = await Recipes.getTruncated(userId);
   } catch (error) {
@@ -49,34 +49,39 @@ router.get("/trunc/:userId", async (req, res) => {
   }
 });
 
-router.get("/userTags/:userId", async (req, res)=> {
-  const userId = req.params.userId
-  let userTags = null
-  try{
-    userTags = await Recipes.getUniqueUserTags(userId)
+router.get("/userTags/:userId", async (req, res) => {
+  const userId = req.params.userId;
+  let userTags = null;
+  try {
+    userTags = await Recipes.getUniqueUserTags(userId);
   } catch (error) {
     console.log("error", error);
-    res
-      .status(500)
-      .json({ message: "An error occurred while trying to retrieve user tags" });
+    res.status(500).json({
+      message: "An error occurred while trying to retrieve user tags",
+    });
   }
   if (userTags) {
     res.status(200).json({ userTags });
   } else {
     res.status(400).json({ message: "Tags not found" });
   }
-})
+});
 
-router.get("/standardTags", async (req, res)=> {
-  try{
-  const standardTags = await Recipes.getStandardTags()
-  res.status(200).json({standardTags})
+router.get("/standardTags", async (req, res) => {
+  try {
+    const standardTags = await Recipes.getStandardTags();
+    res.status(200).json({ standardTags });
   } catch (error) {
     console.log("error", error);
-    res
-      .status(500)
-      .json({ message: "An error occurred while trying to retrieve standard tags" });
+    res.status(500).json({
+      message: "An error occurred while trying to retrieve standard tags",
+    });
   }
-})
+});
+
+router.post("/add-or-edit", async (req, res) => {
+  const fullRecipe = req.body;
+  console.log("fullRecipe", fullRecipe);
+});
 
 module.exports = router;

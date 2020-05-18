@@ -4,6 +4,8 @@ module.exports = {
   add,
   filterFind,
   findById,
+  remove,
+  update
 };
 
 async function add(user) {

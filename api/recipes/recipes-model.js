@@ -12,16 +12,16 @@ module.exports = {
 
 //exported functions
 async function getUniqueUserTags(userId) {
-  let allUserTags = await getUserTags(userId)
+  let allUserTags = await getUserTags(userId);
 
-  const uniqueTagSet = new Set()
-  const uniqueTags = []
+  const uniqueTagSet = new Set();
+  const uniqueTags = [];
 
-  for(let index in allUserTags) {
-    let currTag = allUserTags[index]
+  for (let index in allUserTags) {
+    let currTag = allUserTags[index];
     if (!uniqueTagSet.has(currTag["text"])) {
-      uniqueTags.push(currTag)
-      uniqueTagSet.add(currTag["text"])
+      uniqueTags.push(currTag);
+      uniqueTagSet.add(currTag["text"]);
     }
   }
   return uniqueTags;
@@ -63,8 +63,8 @@ async function getFull(recipeId) {
 
 async function getStandardTags() {
   const standardTags = await db("tags")
-  .where({ isCustom: false })
-  .select("tags.text")
+    .where({ isCustom: false })
+    .select("tags.text", "tags.id");
   return standardTags;
 }
 
@@ -73,7 +73,7 @@ async function getStandardTags() {
 const getInstructions = async (recipeId) => {
   let instructions = await db("instructions")
     .join("recipes", "recipes.id", "instructions.recipe_id")
-    .select("instructions.text", "instructions.order")
+    .select("instructions.text", "instructions.order", "instructions.id")
     .where({ "instructions.recipe_id": recipeId });
   return instructions;
 };
@@ -81,7 +81,7 @@ const getInstructions = async (recipeId) => {
 const getIngredients = async (recipeId) => {
   let ingredients = await db("ingredients")
     .join("recipes", "recipes.id", "ingredients.recipe_id")
-    .select("ingredients.text")
+    .select("ingredients.text", "ingredients.id")
     .where({ "ingredients.recipe_id": recipeId });
   return ingredients;
 };
@@ -90,14 +90,14 @@ const getRecipeTags = async (recipeId) => {
   let tags = await db("tags_recipes")
     .join("tags", "tags.id", "tags_recipes.tag_id")
     .where({ "tags_recipes.recipe_id": recipeId })
-    .select("tags.text");
+    .select("tags.text", "tags.id");
   return tags;
 };
 
-const getUserTags = async (userId)=> {
+const getUserTags = async (userId) => {
   let userTags = await db("tags_recipes")
-  .join("tags", "tags.id", "tags_recipes.tag_id")
-  .select("tags.text", "tags.isCustom")
-  .where({ "tags_recipes.user_id": userId });
-  return userTags
-}
+    .join("tags", "tags.id", "tags_recipes.tag_id")
+    .select("tags.text", "tags.isCustom", "tags.id")
+    .where({ "tags_recipes.user_id": userId });
+  return userTags;
+};
