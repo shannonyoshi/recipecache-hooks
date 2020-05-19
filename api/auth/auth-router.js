@@ -18,8 +18,12 @@ router.post("/register", async (req, res) => {
   const pwHash = bcrypt.hashSync(user.password, 10);
   user.password = pwHash;
   try {
-    const addedUser = await Users.add(user);
-    if (addedUser) {
+    const addedUserArray = await Users.add(user);
+    if (addedUserArray) {
+      const addedUser = addedUserArray[0];
+      req.session.id = addedUser.id;
+      req.session.email = addedUser.email;
+      console.log("addedUser", addedUser);
       res.status(201);
     } else {
       res.status(401);
@@ -33,8 +37,11 @@ router.post("/register", async (req, res) => {
 router.post("/log-in", async (req, res) => {
   let { email, pw } = req.body;
   try {
-    const user = await Users.findBy({ email: email });
+    const userArray = await Users.findBy({ email: email });
+    const user = userArray[0];
     if (user[0] && bcrypt.compareSync(pw, user.password)) {
+      req.session.id = user.id;
+      req.session.email = user.email;
       res.status(200);
     } else {
       res.status(401).json({ message: "Unable to log in, please try again" });

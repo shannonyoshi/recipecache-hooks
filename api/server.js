@@ -14,24 +14,30 @@ server.use(helmet());
 server.use(cors({ origin: "*" }));
 server.use(express.json());
 
-// const redisClient = redis.createClient();
-// redisClient.on("error", (err) => {
-//   console.log("Redis Error: ", err);
-// });
+const redisClient = redis.createClient({
+  port: process.env.REDIS_PORT,
+  host: process.env.HOST,
+});
+redisClient.on("error", (err) => {
+  console.log("Redis Error: ", err);
+});
 
-// server.use(
-//   session({
-//     secret: process.env.SECRET,
-//     store: new redisStore({
-//       client: redisClient,
-//       host: process.env.HOST,
-//       port: process.env.REDIS_PORT,
-//     }),
-//     resave: false,
-//     saveUninitialized: false,
-//     name: "RecipeCache",
-//   })
-// );
+server.use(
+  session({
+    secret: process.env.SECRET,
+    store: new redisStore({
+      client: redisClient,
+    }),
+    resave: false,
+    saveUninitialized: false,
+    name: "RecipeCache",
+    cookie: {
+      secure: false, //TODO: CHANGE THIS SETTING FOR PRODUCTION
+      httpOnly: true, //prevents client side JS from reading cookie
+      maxAge: 1000 * 60 * 24 * 7, //in milliseconds
+    },
+  })
+);
 
 server.use("/api/auth", authRouter);
 
