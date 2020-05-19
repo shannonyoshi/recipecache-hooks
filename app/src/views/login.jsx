@@ -3,10 +3,11 @@ import LogInForm from "../components/logInForm";
 
 import "../styling/logInView.scss";
 
-const LogIn = () => {
+const LogIn = (props) => {
+  const { userStatus, setUserStatus } = props;
   return (
     <div className="login-page-wrapper">
-      <LogInForm />
+      <LogInForm userStatus={userStatus} setUserStatus={setUserStatus} />
     </div>
   );
 };

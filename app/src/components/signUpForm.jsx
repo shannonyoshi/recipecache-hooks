@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
-import { postUser } from "../util/apiFunctions";
+import { registerUser } from "../util/apiFunctions";
 
 const initInputState = {
   email: "",
@@ -9,24 +9,36 @@ const initInputState = {
   password2: "",
 };
 
-const SignUpForm = () => {
+const SignUpForm = (props) => {
+  const { userStatus, setUserStatus } = props;
+  // console.log("userStatus", userStatus);
   const [inputs, setInputs] = useState(initInputState);
   const [passwordMatch, setPasswordMatch] = useState(true);
+
+  let history = useHistory();
 
   const handleChange = (e) => {
     e.persist();
     setInputs((inputs) => ({ ...inputs, [e.target.name]: e.target.value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (inputs.password1 === inputs.password2) {
       setPasswordMatch(true);
       const newUser = {
         email: inputs.email,
-        password: password1,
+        password: inputs.password1,
       };
-      postUser(newUser);
+      // registerUser(newUser);
+      const response = await registerUser(newUser);
+      console.log("response", response);
+      if (response === 201) {
+        setUserStatus({ isLoggedIn: true, error: null });
+        history.push("/home");
+      } else {
+        setUserStatus({ isLoggedIn: false, error: response });
+      }
     } else {
       setPasswordMatch(false);
       setInputs({ ...inputs, password2: "" });
@@ -52,11 +64,6 @@ const SignUpForm = () => {
           value={inputs.email}
           placeholder="something@probablygmail.com"
         />
-        {/* {this.state.showErrors && this.state.validEmail.length > 0 ? (
-            <p>{this.state.emailError}</p>
-          ) : (
-            ""
-          )} */}
         <p>Create password</p>
         <input
           type="password"
@@ -77,11 +84,7 @@ const SignUpForm = () => {
           minLength="8"
           placeholder="Same unforgettable thing"
         />
-        {!passwordMatch ? (
-          <p>Your passwords don't match. Please re-enter</p>
-        ) : (
-          <></>
-        )}
+
         <br />
         <button className="signUp-btn" type="submit">
           Sign Up
@@ -92,46 +95,15 @@ const SignUpForm = () => {
             here
           </Link>
         </p>
-        {/* {this.props.signUpError ? <p>Error Signing Up</p> : <></>} */}
+        {!passwordMatch ? (
+          <p className="error-message">Your passwords don't match</p>
+        ) : null}
+        {userStatus.error ? (
+          <p className="error-message">{userStatus.error}</p>
+        ) : null}
       </form>
     </div>
   );
 };
 
 export default SignUpForm;
-
-// signUp = async (e) => {
-//   e.preventDefault();
-//   const isValid = this.validateInputs();
-//   console.log("state", this.state, "isValid", isValid);
-//   if (isValid) {
-//     const newUser = {
-//       email: this.state.email,
-//       password: this.state.password1,
-//     };
-//     await this.props.signUp(newUser, this.props.history);
-//     this.setState({
-//       email: "",
-//       password1: "",
-//       password2: "",
-//       showErrors: false,
-//       passwordError: false,
-//       emailError: false,
-//     });
-//   } else {
-//     this.setState({ ...this.state, showErrors: true });
-//   }
-// };
-
-// const mapStateToProps = state => ({
-//   loading: state.loading,
-//   error: state.signUpError,
-//   loggedIn: state.loggedIn
-// });
-
-// export default withRouter(
-//   connect(
-//     mapStateToProps,
-//     { signUp, checkStatus })
-//   (SignUpForm)
-// );

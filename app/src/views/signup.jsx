@@ -3,10 +3,12 @@ import SignUpForm from "../components/signUpForm";
 
 import "../styling/signUpView.scss";
 
-const SignUp = () => {
+const SignUp = (props) => {
+  const { userStatus, setUserStatus } = props;
+  console.log("userStatus Sign Up view", userStatus);
   return (
     <div className="signUp-page-wrapper">
-      <SignUpForm />
+      <SignUpForm userStatus={userStatus} setUserStatus={setUserStatus} />
     </div>
   );
 };

@@ -46,8 +46,7 @@ const App = () => {
 
   const [userTags, setUserTags] = useState([allTag]);
   const [selectedTag, setSelectedTag] = useState(allTag);
-  const [userState, setUserState] = useState({
-    userName: "",
+  const [userStatus, setUserStatus] = useState({
     isLoggedIn: false,
     error: null,
   });
@@ -90,11 +89,23 @@ const App = () => {
         />
         <Route
           path="/log-in"
-          render={(props) => <LogIn {...props} userState={userState} />}
+          render={(props) => (
+            <LogIn
+              {...props}
+              userStatus={userStatus}
+              setUserStatus={setUserStatus}
+            />
+          )}
         />
         <Route
           path="/sign-up"
-          render={(props) => <SignUp {...props} userState={userState} />}
+          render={(props) => (
+            <SignUp
+              {...props}
+              userStatus={userStatus}
+              setUserStatus={setUserStatus}
+            />
+          )}
         />
         <Route
           path="/view/:id"
