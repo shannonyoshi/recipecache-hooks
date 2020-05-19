@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { sortInstructions, postPutRecipe } from "../util/apiFunctions";
+import { sortInstructions, postPutRecipe } from "../util/recipeFuncs";
 
 const RecipeForm = (props) => {
   const { setFullRecipe, fullRecipe, allTags, setAllTags, page } = props;

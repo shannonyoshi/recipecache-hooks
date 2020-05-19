@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 
-import { registerUser } from "../util/apiFunctions";
+import { registerUser } from "../util/authFuncs";
 
 const initInputState = {
   email: "",

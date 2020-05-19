@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import Header from "../components/header";
 import FullRecipe from "../components/fullRecipe";
 
-import { fetchFullRecipe, sortInstructions } from "../util/apiFunctions";
+import { fetchFullRecipe, sortInstructions } from "../util/recipeFuncs";
 
 import "../styling/showRecipeView.scss";
 

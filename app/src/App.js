@@ -7,7 +7,7 @@ import SignUp from "./views/signup";
 import ShowRecipe from "./views/showRecipe";
 import RecipeFormView from "./views/recipeFormView";
 
-import { fetchTruncRecipes, fetchUserTags } from "./util/apiFunctions";
+import { fetchTruncRecipes, fetchUserTags } from "./util/recipeFuncs";
 
 //FontAwesome Set Up
 import { library } from "@fortawesome/fontawesome-svg-core";

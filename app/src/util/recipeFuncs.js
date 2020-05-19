@@ -7,7 +7,7 @@ export const sortInstructions = (instructions) => {
 
 //for now userID is hard-coded as 1
 export const fetchTruncRecipes = async () => {
-  const response = await fetch(`${URL}/api/recipes/trunc/1`);
+  const response = await fetch(`${URL}/api/recipes/trunc`);
   let data = await response.json();
   // console.log("data", data);
   if (!response.ok) {
@@ -18,18 +18,8 @@ export const fetchTruncRecipes = async () => {
   }
 };
 
-export const fetchUserStatus = async () => {
-  const response = await fetch(`${URL}/api/auth/status`);
-  // console.log("response", response);
-  if (!response.ok) {
-    console.log("bad response", response);
-  } else {
-    return response.data;
-  }
-};
-
 export const fetchUserTags = async () => {
-  const response = await fetch(`${URL}/api/recipes/userTags/1`);
+  const response = await fetch(`${URL}/api/recipes/userTags`);
   const jsonResponse = await response.json();
   // console.log("jsonResponse", jsonResponse);
   if (!response.ok) {
@@ -77,26 +67,6 @@ export const postPutRecipe = async (recipe) => {
     });
   } catch (e) {
     console.log("e", e);
-  }
-};
-
-export const registerUser = async (user) => {
-  const jsonUser = JSON.stringify(user);
-  try {
-    const response = await fetch(`${URL}/api/auth/register`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: jsonUser,
-    });
-    if (response.status === 201) {
-      return response.status;
-    } else {
-      console.log("response", response);
-      const jsonResponse = await response.json();
-      return jsonResponse.message;
-    }
-  } catch (e) {
-    console.log("e registerUser", e);
   }
 };
 

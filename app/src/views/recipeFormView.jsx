@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import RecipeForm from "../components/recipeForm";
 import Header from "../components/header";
 
-import { fetchFullRecipe, fetchStandardTags } from "../util/apiFunctions";
+import { fetchFullRecipe, fetchStandardTags } from "../util/recipeFuncs";
 
 import "../styling/recipeFormView.scss";
 
