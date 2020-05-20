@@ -5,6 +5,8 @@ module.exports = {
   getTruncated,
   getFull,
   getStandardTags,
+  addTruncRecipe,
+  updateTruncRecipe,
   //   add,
   //   remove,
   //   update,
@@ -14,13 +16,13 @@ module.exports = {
 /*    
 
   addRecipe: 
-    addTruncRecipe, 
+  X  addTruncRecipe, 
     addIngredient, 
     addInstruction, 
     addCustomTag
 
   updateRecipe:
-    updateTruncRecipe,
+  X  updateTruncRecipe,
     updateIngredient, 
     updateInstruction, 
     updateTag_Recipe,
@@ -95,6 +97,27 @@ async function getStandardTags() {
     .where({ isCustom: false })
     .select("tags.text", "tags.id", "tags.isCustom");
   return standardTags;
+}
+
+async function addTruncRecipe(fullRecipe, userId) {
+  let truncRecipe = {
+    user_id: userId,
+    title: fullRecipe.title,
+    source: fullRecipe.source,
+    notes: fullRecipe.notes,
+  };
+  let recipeId = await db("recipes").insert(truncRecipe).returning("id");
+  console.log("recipeId in recipes-model", recipeId);
+  return recipeId[0];
+}
+
+async function updateTruncRecipe(fullRecipe) {
+  let truncChanges = {
+    title: fullRecipe.title,
+    source: fullRecipe.source,
+    notes: fullRecipe.notes,
+  };
+  return db("recipes").where({ id: fullRecipe.id }).update(truncChanges);
 }
 
 //helper functions

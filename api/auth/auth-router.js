@@ -15,7 +15,7 @@ const Users = require("./auth-model");
 
 router.get("/status", async (req, res) => {
   console.log(" STATUS req.session", req.session);
-  if (req.session && req.session.id) {
+  if (req.session && req.session.userId) {
     res.status(200).json({ loggedIn: true });
   } else {
     res.status(200).json({ loggedIn: false });
@@ -25,7 +25,7 @@ router.get("/status", async (req, res) => {
 router.post("/register", async (req, res) => {
   // console.log("req", req);
   let user = req.body;
-  console.log("user", user);
+  // console.log("user", user);
   const pwHash = bcrypt.hashSync(user.password, 10);
   user.password = pwHash;
   try {
@@ -35,7 +35,7 @@ router.post("/register", async (req, res) => {
       req.session.userId = addedUser.id;
       //req.session.save();
       console.log("addedUser", addedUser);
-      console.log("REGISTER req.session", req.session);
+      // console.log("REGISTER req.session", req.session);
       res.status(201).json({ message: "User added" });
     } else {
       res.status(401);

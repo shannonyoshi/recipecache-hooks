@@ -41,14 +41,14 @@ server.use(
 );
 
 // middleware function to check for logged-in users
-var sessionChecker = (req, res, next) => {
-  if (req.session.user && req.cookies.sid) {
-    console.log("user on session!", req.session.user, req.cookies.sid);
-    res.redirect("/");
-  } else {
-    next();
-  }
-};
+// var sessionChecker = (req, res, next) => {
+//   if (req.session.user && req.cookies.sid) {
+//     console.log("user on session!", req.session.user, req.cookies.sid);
+//     res.redirect("/");
+//   } else {
+//     next();
+//   }
+// };
 
 server.use("/api/auth", authRouter);
 

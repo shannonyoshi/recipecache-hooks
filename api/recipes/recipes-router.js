@@ -82,18 +82,22 @@ router.get("/standardTags", async (req, res) => {
   }
 });
 
-router.post("/add-or-edit", async (req, res) => {
-  // console.log("req", req);
-  console.log("ADD/EDIT req.session", req.session);
+router.post("/add", async (req, res) => {
+  console.log("ADD req.session", req.session);
   const userId = req.session.userId;
   const fullRecipe = req.body;
-  if (fullRecipe.id) {
-    // const truncRecipe = {};
-    //TODO: put request
-  } else {
-    //TODO: post request
-  }
+  const recipe = await Recipes.addTruncRecipe(fullRecipe, userId);
+  console.log("recipe id in add route", recipe);
+});
+
+router.post("/edit", async (req, res) => {
+  // console.log("req", req);
+  console.log("UPDATE req.session", req.session);
+  const fullRecipe = req.body;
   console.log("fullRecipe", fullRecipe);
+
+  const recipe = await Recipes.updateTruncRecipe(fullRecipe);
+  console.log("recipe", recipe);
 });
 
 module.exports = router;
