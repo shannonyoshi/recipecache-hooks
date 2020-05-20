@@ -1,3 +1,5 @@
+const URL = "http://localhost:3000";
+
 export const registerUser = async (user) => {
   const jsonUser = JSON.stringify(user);
   try {
@@ -26,17 +28,25 @@ export const loginUser = async (user) => {
       headers: { "Content-Type": "application/json" },
       body: jsonUser,
     });
+    if (response.status === 200) {
+      return 200;
+    } else {
+      const jsonResponse = response.json();
+      return jsonResponse.message;
+    }
   } catch (e) {
     console.log("e loginUser", e);
   }
 };
 
 export const fetchUserStatus = async () => {
-  const response = await fetch(`${URL}/api/auth/status`);
-  // console.log("response", response);
-  if (!response.ok) {
-    console.log("bad response", response);
-  } else {
-    return response.data;
+  console.log("fetchUserStatus");
+  try {
+    const response = await fetch(`${URL}/api/auth/status`);
+    const jsonResponse = await response.json();
+    console.log("jsonResponse", jsonResponse);
+    return jsonResponse.loggedIn;
+  } catch (e) {
+    console.log("e", e);
   }
 };

@@ -8,6 +8,7 @@ import ShowRecipe from "./views/showRecipe";
 import RecipeFormView from "./views/recipeFormView";
 
 import { fetchTruncRecipes, fetchUserTags } from "./util/recipeFuncs";
+import { fetchUserStatus } from "./util/authFuncs";
 
 //FontAwesome Set Up
 import { library } from "@fortawesome/fontawesome-svg-core";
@@ -54,7 +55,18 @@ const App = () => {
   const [fullRecipe, setFullRecipe] = useState(emptyFullRecipe);
 
   useEffect(() => {
+    console.log("USE EFFECT");
     const fetchData = async () => {
+      try {
+        const authStatus = await fetchUserStatus();
+        setUserStatus({ isLoggedIn: authStatus, error: null });
+        console.log("authStatus", authStatus);
+        if (!authStatus) {
+          return;
+        }
+      } catch (error) {
+        console.log("error", error);
+      }
       try {
         let recipes = await fetchTruncRecipes();
         setTruncRecipes([...recipes]);
@@ -71,6 +83,8 @@ const App = () => {
     };
     fetchData();
   }, []);
+
+  // console.log("userStatus", userStatus);
 
   return (
     <div className="App">

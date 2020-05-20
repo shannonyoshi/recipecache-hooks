@@ -9,7 +9,7 @@ import "../styling/showRecipeView.scss";
 const ShowRecipe = (props) => {
   const { setFullRecipe, fullRecipe } = props;
   const recipeId = props.match.params.id;
-  console.log("showRecipe recipeId", recipeId);
+  // console.log("showRecipe recipeId", recipeId);
   useEffect(() => {
     const fetchRecipe = async () => {
       let recipe = await fetchFullRecipe(recipeId);

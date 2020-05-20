@@ -1,8 +1,8 @@
-const URL = "http://localhost:8080";
+const URL = "http://localhost:3000";
 
 export const sortInstructions = (instructions) => {
   instructions.sort((a, b) => (a.order > b.order ? 1 : -1));
-  console.log("sortInstructions instructions", instructions);
+  // console.log("sortInstructions instructions", instructions);
 };
 
 //for now userID is hard-coded as 1
@@ -40,7 +40,7 @@ export const fetchStandardTags = async () => {
 };
 
 export const fetchFullRecipe = async (recipeId) => {
-  console.log("apiFunctions RecipeId", recipeId);
+  // console.log("apiFunctions RecipeId", recipeId);
   try {
     const response = await fetch(`${URL}/api/recipes/full/${recipeId}`);
     const jsonResponse = await response.json();
@@ -56,15 +56,16 @@ export const fetchFullRecipe = async (recipeId) => {
 };
 
 export const postPutRecipe = async (recipe) => {
-  console.log(recipe);
+  // console.log(recipe);
   const jsonRecipe = JSON.stringify(recipe);
-  console.log("jsonRecipe", jsonRecipe);
+  // console.log("jsonRecipe", jsonRecipe);
   try {
     const response = await fetch(`${URL}/api/recipes/add-or-edit`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: jsonRecipe,
     });
+    console.log("response", response);
   } catch (e) {
     console.log("e", e);
   }

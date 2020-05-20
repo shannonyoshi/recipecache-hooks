@@ -40,7 +40,7 @@ const RecipeFormView = (props) => {
   return (
     <div>
       <Header />
-      {page == "/add" ? <h1>Add Recipe</h1> : <h1>Edit Recipe</h1>}
+      {page === "/add" ? <h1>Add Recipe</h1> : <h1>Edit Recipe</h1>}
       <RecipeForm
         fullRecipe={fullRecipe}
         setFullRecipe={setFullRecipe}

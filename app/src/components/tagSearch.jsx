@@ -2,7 +2,6 @@ import React from "react";
 
 const TagSearch = (props) => {
   const { userTags, selectedTag, setSelectedTag } = props;
-  console.log();
   const selectTag = (e, tag) => {
     e.preventDefault();
     setSelectedTag(tag);

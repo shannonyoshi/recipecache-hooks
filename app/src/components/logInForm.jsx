@@ -1,10 +1,13 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
+import { loginUser } from "../util/authFuncs";
 
 const initInputState = { email: "", password: "" };
 
 const LogInForm = () => {
   const [inputs, setInputs] = useState(initInputState);
+  const [error, setError] = useState(null);
+  let history = useHistory();
 
   const handleChange = (e) => {
     e.persist();
@@ -12,17 +15,20 @@ const LogInForm = () => {
     setInputs((inputs) => ({ ...inputs, [e.target.name]: e.target.value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    //TODO: add handleSubmit function
+    setError(null);
+    const response = await loginUser(inputs);
+    if (response === 200) {
+      setInputs(initInputState);
+      history.push("/home");
+    } else {
+      setError(response);
+    }
   };
 
   return (
     <div className="login-form-wrapper">
-      {/* {this.props.loading ? (
-          <h2>Loading</h2>
-        ) : (
-          <> */}
       <form className="login-form" onSubmit={handleSubmit}>
         <div className="login-form-header">
           <div className="login-logo-wrapper">
@@ -57,8 +63,7 @@ const LogInForm = () => {
           </Link>
         </p>
       </form>
-      {/* </> */}
-      {/* )} */}
+      {error ? <p className="error-message">{error}</p> : null}
     </div>
   );
 };

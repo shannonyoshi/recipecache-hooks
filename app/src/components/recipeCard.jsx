@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 const RecipeCard = (props) => {
   const { recipe } = props;
-  console.log("RecipeCard: recipe", recipe);
+  // console.log("RecipeCard: recipe", recipe);
 
   return (
     // <div className="recipe-card">

@@ -4,23 +4,23 @@ import RecipeCard from "./recipeCard";
 const RecipeDashboard = (props) => {
   const { selectedTag, truncRecipes } = props;
   // console.log("Dashboard: selectedTag", selectedTag);
-  console.log("Dashboard truncRecipes", truncRecipes);
+  // console.log("Dashboard truncRecipes", truncRecipes);
   const [showRecipes, setShowRecipes] = useState([...truncRecipes]);
   useEffect(() => {
-    console.log("useEffect");
+    // console.log("useEffect");
     filterRecipes();
   }, [selectedTag, truncRecipes]);
 
   const filterRecipes = () => {
-    console.log("Filter");
-    console.log("selectedTag", selectedTag);
+    // console.log("Filter");
+    // console.log("selectedTag", selectedTag);
     if (selectedTag.text === "All") {
       setShowRecipes([...truncRecipes]);
     } else {
-      console.log("Else: selectedTag", selectedTag);
+      // console.log("Else: selectedTag", selectedTag);
     }
   };
-  console.log("showRecipes", showRecipes);
+  // console.log("showRecipes", showRecipes);
   return (
     <div className="recipe-cards-wrapper">
       {!showRecipes ? (

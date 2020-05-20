@@ -73,20 +73,20 @@ const RecipeForm = (props) => {
       text: "",
       order: fullRecipe.instructions.length + 1,
     };
-    console.log("emptyInstruction", emptyInstruction);
+    // console.log("emptyInstruction", emptyInstruction);
     setFullRecipe({
       ...fullRecipe,
       instructions: [...fullRecipe.instructions, emptyInstruction],
     });
   };
   const tagToggle = (tag) => {
-    console.log("tagToggle");
+    // console.log("tagToggle");
     let currentTags = fullRecipe.tags;
     const indexToRemove = currentTags.findIndex(
-      (thisTag) => thisTag.text == tag.text
+      (thisTag) => thisTag.text === tag.text
     );
-    console.log("indexToRemove", indexToRemove);
-    if (indexToRemove != -1) {
+    // console.log("indexToRemove", indexToRemove);
+    if (indexToRemove !== -1) {
       currentTags.splice(indexToRemove, 1);
     } else {
       currentTags.push(tag);
@@ -173,7 +173,7 @@ const RecipeForm = (props) => {
                     placeholder="Do something"
                     className="instruction-input"
                   />
-                  {index != 0 ? (
+                  {index !== 0 ? (
                     <button
                       onClick={(e) =>
                         moveInstruction(e, "up", instruction.order)
@@ -186,7 +186,7 @@ const RecipeForm = (props) => {
                       />
                     </button>
                   ) : null}
-                  {index != fullRecipe.instructions.length - 1 ? (
+                  {index !== fullRecipe.instructions.length - 1 ? (
                     <button
                       onClick={(e) =>
                         moveInstruction(e, "down", instruction.order)
@@ -217,7 +217,7 @@ const RecipeForm = (props) => {
               <button
                 type="button"
                 className={`tag-button ${
-                  fullRecipe.tags.some((thisTag) => thisTag.text == tag.text)
+                  fullRecipe.tags.some((thisTag) => thisTag.text === tag.text)
                     ? "active"
                     : ""
                 }`}
@@ -257,7 +257,7 @@ const RecipeForm = (props) => {
           />
         </section>
         <button type="submit" className="submit-button">
-          {page == "/add" ? "Create" : "Save"} Recipe
+          {page === "/add" ? "Create" : "Save"} Recipe
         </button>
       </form>
     </div>

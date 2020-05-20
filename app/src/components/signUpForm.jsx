@@ -32,7 +32,7 @@ const SignUpForm = (props) => {
       };
       // registerUser(newUser);
       const response = await registerUser(newUser);
-      console.log("response", response);
+      // console.log("response", response);
       if (response === 201) {
         setUserStatus({ isLoggedIn: true, error: null });
         history.push("/home");
@@ -90,7 +90,7 @@ const SignUpForm = (props) => {
           Sign Up
         </button>
         <p className="signUp-small-font">
-          Already a member? Sign in{" "}
+          Already a member? Log in{" "}
           <Link to="/log-in" className="signUp-link">
             here
           </Link>

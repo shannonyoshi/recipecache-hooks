@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 const fullRecipe = (props) => {
   const { fullRecipe } = props;
-  console.log("fullRecipe", fullRecipe);
+  // console.log("fullRecipe", fullRecipe);
   return (
     <div className="recipe-wrapper">
       <p>{fullRecipe.title}</p>
