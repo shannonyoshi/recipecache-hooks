@@ -32,8 +32,9 @@ router.get("/full/:recipeId", async (req, res) => {
   }
 });
 
-router.get("/trunc/:userId", async (req, res) => {
-  const userId = req.params.userId;
+router.get("/trunc", async (req, res) => {
+  const userId = req.session.userId;
+  console.log("GET TRUNC req.session", req.session);
   let truncatedRecipes = null;
   try {
     truncatedRecipes = await Recipes.getTruncated(userId);
@@ -50,8 +51,9 @@ router.get("/trunc/:userId", async (req, res) => {
   }
 });
 
-router.get("/userTags/:userId", async (req, res) => {
-  const userId = req.params.userId;
+router.get("/userTags", async (req, res) => {
+  console.log("USER TAGS req.session", req.session);
+  const userId = req.session.userId;
   let userTags = null;
   try {
     userTags = await Recipes.getUniqueUserTags(userId);
@@ -81,7 +83,9 @@ router.get("/standardTags", async (req, res) => {
 });
 
 router.post("/add-or-edit", async (req, res) => {
-  console.log("req", req);
+  // console.log("req", req);
+  console.log("ADD/EDIT req.session", req.session);
+  const userId = req.session.userId;
   const fullRecipe = req.body;
   if (fullRecipe.id) {
     // const truncRecipe = {};

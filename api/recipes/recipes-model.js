@@ -39,6 +39,7 @@ module.exports = {
 
 //exported functions
 async function getUniqueUserTags(userId) {
+  console.log("getUniqueUserTags userId", userId);
   let allUserTags = await getUserTags(userId);
 
   const uniqueTagSet = new Set();
@@ -55,6 +56,7 @@ async function getUniqueUserTags(userId) {
 }
 
 async function getTruncated(userId) {
+  console.log("getTruncated userId", userId);
   let truncRecipes = await db("recipes").where({ user_id: userId });
   for (let index in truncRecipes) {
     const recipeId = truncRecipes[index]["id"];
@@ -114,6 +116,7 @@ const getIngredients = async (recipeId) => {
 };
 
 const getRecipeTags = async (recipeId) => {
+  console.log("getRecipeTags recipeId", recipeId);
   let tags = await db("tags_recipes")
     .join("tags", "tags.id", "tags_recipes.tag_id")
     .where({ "tags_recipes.recipe_id": recipeId })
@@ -122,6 +125,7 @@ const getRecipeTags = async (recipeId) => {
 };
 
 const getUserTags = async (userId) => {
+  console.log("getUserTags userId", userId);
   let userTags = await db("tags_recipes")
     .join("tags", "tags.id", "tags_recipes.tag_id")
     .select("tags.text", "tags.isCustom", "tags.id")

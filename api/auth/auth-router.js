@@ -5,11 +5,22 @@ const Users = require("./auth-model");
 
 /* Endpoints: 
     TODO:
-      POST /register   adds new user to DB, encrypts pw
-      PUT  /updatePw   updates and encrypts pw
-      POST /login      creates redis user session
+      GET  /status     checks for cookies to see if use is logged in
+    X POST /register   adds new user to DB, encrypts password, adds redis cookie
+      POST /log-in     creates redis user session
       POST /logout     deletes user session
+    LATER:  
+      PUT  /updatePw   updates and encrypts password
 */
+
+router.get("/status", async (req, res) => {
+  console.log(" STATUS req.session", req.session);
+  if (req.session && req.session.id) {
+    res.status(200).json({ loggedIn: true });
+  } else {
+    res.status(200).json({ loggedIn: false });
+  }
+});
 
 router.post("/register", async (req, res) => {
   // console.log("req", req);
@@ -21,34 +32,42 @@ router.post("/register", async (req, res) => {
     const addedUserArray = await Users.add(user);
     if (addedUserArray) {
       const addedUser = addedUserArray[0];
-      req.session.id = addedUser.id;
-      req.session.email = addedUser.email;
+      req.session.userId = addedUser.id;
+      //req.session.save();
       console.log("addedUser", addedUser);
-      res.status(201);
+      console.log("REGISTER req.session", req.session);
+      res.status(201).json({ message: "User added" });
     } else {
       res.status(401);
     }
   } catch (e) {
+    console.log("e auth router", e.errno);
+    if (e.errno === 19) {
+      res.status(400).json({ message: "Account already exists" });
+    }
     res.status(500).json({ message: "Unable to register" });
-    console.log("e", e);
   }
 });
 
-router.post("/log-in", async (req, res) => {
-  let { email, pw } = req.body;
+router.post("/login", async (req, res) => {
+  let { email, password } = req.body;
+  console.log("password", password);
+  console.log("Log in email", email);
   try {
     const userArray = await Users.findBy({ email: email });
     const user = userArray[0];
-    if (user[0] && bcrypt.compareSync(pw, user.password)) {
-      req.session.id = user.id;
-      req.session.email = user.email;
-      res.status(200);
+    console.log("user", user);
+    if (user && bcrypt.compareSync(password, user.password)) {
+      req.session.userId = user.id;
+      // req.session.save();
+      console.log("LOGIN req.session", req.session);
+      res.status(200).end();
     } else {
-      res.status(401).json({ message: "Unable to log in, please try again" });
+      res.status(401).json({ message: "Invalid email or password" });
     }
   } catch (e) {
-    res.status(500).json({ message: "" });
     console.log("e", e);
+    res.status(500).json({ message: "Server error occurred" });
   }
 });
 

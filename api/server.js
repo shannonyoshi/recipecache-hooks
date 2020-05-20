@@ -31,13 +31,24 @@ server.use(
     resave: false,
     saveUninitialized: false,
     name: "RecipeCache",
+    key: "sid",
     cookie: {
       secure: false, //TODO: CHANGE THIS SETTING FOR PRODUCTION
       httpOnly: true, //prevents client side JS from reading cookie
-      maxAge: 1000 * 60 * 24 * 7, //in milliseconds
+      maxAge: 1000 * 60 * 60 * 24 * 7, //in milliseconds
     },
   })
 );
+
+// middleware function to check for logged-in users
+var sessionChecker = (req, res, next) => {
+  if (req.session.user && req.cookies.sid) {
+    console.log("user on session!", req.session.user, req.cookies.sid);
+    res.redirect("/");
+  } else {
+    next();
+  }
+};
 
 server.use("/api/auth", authRouter);
 

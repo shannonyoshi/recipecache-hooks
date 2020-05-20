@@ -18,9 +18,9 @@ async function findBy(filter) {
 }
 
 async function findById(id) {
-  return db("users").where({ id }).first();
+  return db("users").where({ id: id }).first();
 }
 
 async function removeId(id) {
-  await db("users").where({ id }).del();
+  await db("users").where({ id: id }).del();
 }
