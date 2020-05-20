@@ -86,8 +86,22 @@ router.post("/add", async (req, res) => {
   console.log("ADD req.session", req.session);
   const userId = req.session.userId;
   const fullRecipe = req.body;
-  const recipe = await Recipes.addTruncRecipe(fullRecipe, userId);
-  console.log("recipe id in add route", recipe);
+  console.log("fullRecipe", fullRecipe);
+  const recipeId = await Recipes.addTruncRecipe(fullRecipe, userId);
+  // console.log("recipe id in add route", recipeId);
+  if (recipeId) {
+    const ingredients = fullRecipe.ingredients.map((ingredient) => ({
+      ...ingredient,
+      recipe_id: recipeId,
+    }));
+    // console.log("ingredients", ingredients);
+    const ingIsAdded = await Recipes.addIngredients(ingredients);
+    const instructions = fullRecipe.instructions.map((instruction) => ({
+      ...instruction,
+      recipe_id: recipeId,
+    }));
+    const instIsAdded = await Recipes.addInstructions(instructions);
+  }
 });
 
 router.post("/edit", async (req, res) => {

@@ -6,7 +6,10 @@ module.exports = {
   getFull,
   getStandardTags,
   addTruncRecipe,
+  addIngredients,
+  addInstructions,
   updateTruncRecipe,
+
   //   add,
   //   remove,
   //   update,
@@ -70,22 +73,13 @@ async function getTruncated(userId) {
 async function getFull(recipeId) {
   let recipe = await db("recipes").where({ id: recipeId });
   recipe = recipe[0];
-  // console.log('recipe', recipe)
   if (recipe) {
     const ingredients = await getIngredients(recipeId);
-    // console.log('ingredients', ingredients)
-
     const instructions = await getInstructions(recipeId);
-    //    console.log('instructions', instructions)
-
     const tags = await getRecipeTags(recipeId);
-    // console.log('tags', tags)
-
     recipe["ingredients"] = ingredients;
     recipe["instructions"] = instructions;
     recipe["tags"] = tags;
-
-    // console.log("recipeFull", recipe);
     return recipe;
   } else {
     return null;
@@ -106,9 +100,21 @@ async function addTruncRecipe(fullRecipe, userId) {
     source: fullRecipe.source,
     notes: fullRecipe.notes,
   };
-  let recipeId = await db("recipes").insert(truncRecipe).returning("id");
+  let recipeId = await db("recipes").insert(truncRecipe, "id");
   console.log("recipeId in recipes-model", recipeId);
   return recipeId[0];
+}
+
+async function addIngredients(ingredients) {
+  const response = await db("ingredients").insert(ingredients);
+  console.log("addIngredient response", response);
+  return response;
+}
+
+async function addInstructions(instructions) {
+  const response = await db("instructions").insert(instructions);
+  console.log("addInstruction response", response);
+  return response;
 }
 
 async function updateTruncRecipe(fullRecipe) {
