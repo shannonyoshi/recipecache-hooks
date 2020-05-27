@@ -25,9 +25,6 @@ const RecipeForm = (props) => {
       id: fullRecipe.id,
       title: fullRecipe.title,
       source: fullRecipe.source,
-      // ingredients: filteredIngredients,
-      // instructions: filteredInstructions,
-      // tags: fullTags,
       notes: fullRecipe.notes,
     };
     if (customTag.length > 0) {
@@ -49,7 +46,6 @@ const RecipeForm = (props) => {
     if (filteredInstructions.length > 0) {
       recipeSubmit["instructions"] = filteredInstructions;
     }
-
     postPutRecipe(recipeSubmit);
   };
 
@@ -237,7 +233,7 @@ const RecipeForm = (props) => {
         <section className="tag-section">
           <label>Tags</label>
           <div className="tags">
-            {allTags.map((tag) => (
+            {allTags.map((tag, index) => (
               <button
                 type="button"
                 className={`tag-button ${
@@ -246,7 +242,7 @@ const RecipeForm = (props) => {
                     : ""
                 }`}
                 onClick={() => tagToggle(tag)}
-                key={`tag-button ${tag.id}`}>
+                key={`tag-button ${tag.id ? tag.id : `c${index}`}`}>
                 {tag.text}
               </button>
             ))}
