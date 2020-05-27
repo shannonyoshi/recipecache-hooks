@@ -21,24 +21,35 @@ const RecipeForm = (props) => {
     e.preventDefault();
     //assumes that if text is entered in the custom tag input, user wants to add the tag
     const fullTags = fullRecipe.tags;
-    if (customTag.length > 0) {
-      fullTags.push({ text: customTag, isCustom: true, id: null });
-    }
-    const filteredIngredients = fullRecipe.ingredients.filter(
-      (ingredient) => ingredient.text.length > 0
-    );
-    const filteredInstructions = fullRecipe.instructions.filter(
-      (instruction) => instruction.text.length > 0
-    );
     let recipeSubmit = {
       id: fullRecipe.id,
       title: fullRecipe.title,
       source: fullRecipe.source,
-      ingredients: filteredIngredients,
-      instructions: filteredInstructions,
-      tags: fullTags,
+      // ingredients: filteredIngredients,
+      // instructions: filteredInstructions,
+      // tags: fullTags,
       notes: fullRecipe.notes,
     };
+    if (customTag.length > 0) {
+      createCustomTag();
+      fullTags.push({ text: customTag, isCustom: true, id: null });
+    }
+    if (fullTags.length > 0) {
+      recipeSubmit["tags"] = fullTags;
+    }
+    const filteredIngredients = fullRecipe.ingredients.filter(
+      (ingredient) => ingredient.text.length > 0
+    );
+    if (filteredIngredients.length > 0) {
+      recipeSubmit["ingredients"] = filteredIngredients;
+    }
+    const filteredInstructions = fullRecipe.instructions.filter(
+      (instruction) => instruction.text.length > 0
+    );
+    if (filteredInstructions.length > 0) {
+      recipeSubmit["instructions"] = filteredInstructions;
+    }
+
     postPutRecipe(recipeSubmit);
   };
 
