@@ -82,25 +82,29 @@ router.get("/standardTags", async (req, res) => {
   }
 });
 
+//empty fields are not submitted in the recipe, so checking if field is present ensures not trying to add nothing to db
 router.post("/add", async (req, res) => {
   console.log("ADD req.session", req.session);
   const userId = req.session.userId;
   const fullRecipe = req.body;
   console.log("fullRecipe", fullRecipe);
   const recipeId = await Recipes.addTruncRecipe(fullRecipe, userId);
-  // console.log("recipe id in add route", recipeId);
   if (recipeId) {
-    const ingredients = fullRecipe.ingredients.map((ingredient) => ({
-      ...ingredient,
-      recipe_id: recipeId,
-    }));
-    // console.log("ingredients", ingredients);
-    const ingIsAdded = await Recipes.addIngredients(ingredients);
-    const instructions = fullRecipe.instructions.map((instruction) => ({
-      ...instruction,
-      recipe_id: recipeId,
-    }));
-    const instIsAdded = await Recipes.addInstructions(instructions);
+    if (fullRecipe.ingredients) {
+      await Recipes.addIngredients(fullRecipe.ingredients, recipeId);
+    }
+    if (fullRecipe.instructions) {
+      await Recipes.addInstructions(fullRecipe.instructions, recipeId);
+    }
+    if (fullRecipe.tags) {
+      await Recipes.addTagsNewRecipe(fullRecipe.tags, recipeId, userId);
+      // const newTags = fullRecipe.tags.filter((tag) => !tag.id);
+      // const addedTagIds = await Recipes.createCustomTags(newTags);
+      // const otherTags = fullRecipe.tags.filter((tag) => tag.id);
+      // for (let i = 0; i < otherTags.length; i++) {
+      //   addedTagIds.push(otherTags[i].id);
+      // }
+    }
   }
 });
 

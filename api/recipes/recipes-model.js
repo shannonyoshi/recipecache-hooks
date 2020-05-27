@@ -9,6 +9,7 @@ module.exports = {
   addIngredients,
   addInstructions,
   updateTruncRecipe,
+  addTagsNewRecipe,
 
   //   add,
   //   remove,
@@ -17,19 +18,11 @@ module.exports = {
 
 // TODO: functions to write:
 /*    
-
-  addRecipe: 
-  X  addTruncRecipe, 
-    addIngredient, 
-    addInstruction, 
-    addCustomTag
-
   updateRecipe:
   X  updateTruncRecipe,
     updateIngredient, 
     updateInstruction, 
     updateTag_Recipe,
-
 
   deleteRecipe:
     deleteTruncRecipe,
@@ -38,8 +31,6 @@ module.exports = {
   
   deleteCustomTag,
   updateCustomTag
-
-
 */
 
 //exported functions
@@ -104,17 +95,37 @@ async function addTruncRecipe(fullRecipe, userId) {
   console.log("recipeId in recipes-model", recipeId);
   return recipeId[0];
 }
-
-async function addIngredients(ingredients) {
-  const response = await db("ingredients").insert(ingredients);
+//ingredients do not have recipeId added yet
+async function addIngredients(ingredients, recipeId) {
+  const ingArray = addProperty(ingredients, "recipe_id", recipeId);
+  const response = await db("ingredients").insert(ingArray);
   console.log("addIngredient response", response);
   return response;
 }
-
-async function addInstructions(instructions) {
-  const response = await db("instructions").insert(instructions);
+//instructions do not have recipeId added yet
+async function addInstructions(instructions, recipeId) {
+  const instArray = addProperty(instructions, "recipe_id", recipeId);
+  const response = await db("instructions").insert(instArray);
   console.log("addInstruction response", response);
   return response;
+}
+
+async function addTagsNewRecipe(allTags, recipeId, userId) {
+  //tags that need to be added to "tags" DB
+  const newCustomTags = allTags.filter((tag) => !tag.id);
+  let tagIds = [];
+  if (newCustomTags.length > 0) {
+    tagIds = await createCustomTags(newCustomTags);
+  }
+  //tags that are already in "tags" DB
+  const otherTags = allTags.filter((tag) => tag.id);
+  for (let i = 0; i < otherTags.length; i++) {
+    tagIds.push({ tag_id: otherTags[i].id });
+  }
+  const tagsWRecId = addProperty(tagIds, "recipe_id", recipeId);
+  const preppedTags = addProperty(tagsWRecId, "user_id", userId);
+  console.log("preppedTags", preppedTags);
+  await addTagsRecipes(preppedTags);
 }
 
 async function updateTruncRecipe(fullRecipe) {
@@ -127,6 +138,30 @@ async function updateTruncRecipe(fullRecipe) {
 }
 
 //helper functions
+
+const addTagsRecipes = async (tags) => {
+  await db("tags_recipes").insert(tags);
+};
+
+const createCustomTags = async (tags) => {
+  const tagIds = [];
+  for (let i = 0; i < tags.length; i++) {
+    const id = await db("tags").insert({
+      text: tags[i].text,
+      isCustom: tags[i].isCustom,
+    });
+    tagIds.push({ tag_id: id[0] });
+  }
+  return tagIds;
+};
+
+const addProperty = (array, propertyName, propertyValue) => {
+  const newArray = array.map((item) => ({
+    ...item,
+    [propertyName]: propertyValue,
+  }));
+  return newArray;
+};
 
 const getInstructions = async (recipeId) => {
   let instructions = await db("instructions")
