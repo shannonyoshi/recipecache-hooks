@@ -59,15 +59,28 @@ export const postPutRecipe = async (recipe) => {
   // console.log(recipe);
   const jsonRecipe = JSON.stringify(recipe);
   // console.log("jsonRecipe", jsonRecipe);
-  try {
-    const response = await fetch(`${URL}/api/recipes/add-or-edit`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: jsonRecipe,
-    });
-    console.log("response", response);
-  } catch (e) {
-    console.log("e", e);
+  if (recipe.id) {
+    try {
+      const response = await fetch(`${URL}/api/recipes/edit`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: jsonRecipe,
+      });
+      console.log("response", response);
+    } catch (e) {
+      console.log("e", e);
+    }
+  } else {
+    try {
+      const response = await fetch(`${URL}/api/recipes/add`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: jsonRecipe,
+      });
+      console.log("response", response);
+    } catch (e) {
+      console.log("e", e);
+    }
   }
 };
 

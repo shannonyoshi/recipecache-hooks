@@ -14,12 +14,14 @@ const RecipeFormView = (props) => {
     if (allTags.length === 0) {
       const getStandardTags = async () => {
         const tags = await fetchStandardTags();
-        const mergedTags = [...tags, ...userTags];
-        const uniqueMergedTags = mergedTags.filter(
-          (tag, index) =>
-            mergedTags.indexOf(tag) === index && tag.text !== "All"
-        );
-        setAllTags([...uniqueMergedTags]);
+        if (tags) {
+          const mergedTags = [...tags, ...userTags];
+          const uniqueMergedTags = mergedTags.filter(
+            (tag, index) =>
+              mergedTags.indexOf(tag) === index && tag.text !== "All"
+          );
+          setAllTags([...uniqueMergedTags]);
+        }
       };
       getStandardTags();
     }

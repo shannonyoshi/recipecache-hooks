@@ -15,13 +15,31 @@ const RecipeForm = (props) => {
       ...fullRecipe,
       [names[0]]: [...array],
     }));
-    // }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    postPutRecipe(fullRecipe);
-    //TODO: finish this function
+    //assumes that if text is entered in the custom tag input, user wants to add the tag
+    const fullTags = fullRecipe.tags;
+    if (customTag.length > 0) {
+      fullTags.push({ text: customTag, isCustom: true, id: null });
+    }
+    const filteredIngredients = fullRecipe.ingredients.filter(
+      (ingredient) => ingredient.text.length > 0
+    );
+    const filteredInstructions = fullRecipe.instructions.filter(
+      (instruction) => instruction.text.length > 0
+    );
+    let recipeSubmit = {
+      id: fullRecipe.id,
+      title: fullRecipe.title,
+      source: fullRecipe.source,
+      ingredients: filteredIngredients,
+      instructions: filteredInstructions,
+      tags: fullTags,
+      notes: fullRecipe.notes,
+    };
+    postPutRecipe(recipeSubmit);
   };
 
   const moveInstruction = (e, change, curPos) => {
@@ -73,19 +91,16 @@ const RecipeForm = (props) => {
       text: "",
       order: fullRecipe.instructions.length + 1,
     };
-    // console.log("emptyInstruction", emptyInstruction);
     setFullRecipe({
       ...fullRecipe,
       instructions: [...fullRecipe.instructions, emptyInstruction],
     });
   };
   const tagToggle = (tag) => {
-    // console.log("tagToggle");
     let currentTags = fullRecipe.tags;
     const indexToRemove = currentTags.findIndex(
       (thisTag) => thisTag.text === tag.text
     );
-    // console.log("indexToRemove", indexToRemove);
     if (indexToRemove !== -1) {
       currentTags.splice(indexToRemove, 1);
     } else {
@@ -96,7 +111,7 @@ const RecipeForm = (props) => {
 
   const createCustomTag = () => {
     if (customTag.length > 0) {
-      const newTag = { text: customTag };
+      const newTag = { text: customTag, isCustom: true, id: null };
       setFullRecipe({ ...fullRecipe, tags: [...fullRecipe.tags, newTag] });
       setAllTags([...allTags, newTag]);
       setCustomTag("");
@@ -130,7 +145,6 @@ const RecipeForm = (props) => {
             value={fullRecipe.source}
             placeholder="Gourmet Magazine"
           />
-          {/* </div> */}
         </section>
         <section className="ingredients">
           <label>Ingredients</label>
@@ -162,10 +176,9 @@ const RecipeForm = (props) => {
           {fullRecipe.instructions.length > 0 ? (
             <div className="instruction-list">
               {fullRecipe.instructions.map((instruction, index) => (
-                <div className="instruction">
+                <div className="instruction" key={`inst T ${index}`}>
                   <span>{instruction.order}. </span>
                   <textarea
-                    key={`inst T ${index}`}
                     type="text"
                     name="instructions text"
                     value={instruction.text}
@@ -221,7 +234,8 @@ const RecipeForm = (props) => {
                     ? "active"
                     : ""
                 }`}
-                onClick={() => tagToggle(tag)}>
+                onClick={() => tagToggle(tag)}
+                key={`tag-button ${tag.id}`}>
                 {tag.text}
               </button>
             ))}

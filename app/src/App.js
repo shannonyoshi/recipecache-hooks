@@ -56,33 +56,50 @@ const App = () => {
 
   useEffect(() => {
     console.log("USE EFFECT");
-    const fetchData = async () => {
+    const fetchStatus = async () => {
       try {
         const authStatus = await fetchUserStatus();
         setUserStatus({ isLoggedIn: authStatus, error: null });
         console.log("authStatus", authStatus);
-        if (!authStatus) {
-          return;
-        }
       } catch (error) {
         console.log("error", error);
       }
-      try {
-        let recipes = await fetchTruncRecipes();
-        setTruncRecipes([...recipes]);
-        // console.log("recipes", recipes);
-      } catch (error) {
-        console.log("error", error);
-      }
-      try {
-        let tags = await fetchUserTags();
-        setUserTags([allTag, ...tags]);
-      } catch (error) {
-        console.log("error", error);
-      }
+      // try {
+      //   let recipes = await fetchTruncRecipes();
+      //   setTruncRecipes([...recipes]);
+      //   // console.log("recipes", recipes);
+      // } catch (error) {
+      //   console.log("error", error);
+      // }
+      // try {
+      //   let tags = await fetchUserTags();
+      //   setUserTags([allTag, ...tags]);
+      // } catch (error) {
+      //   console.log("error", error);
+      // }
     };
-    fetchData();
+    fetchStatus();
   }, []);
+
+  useEffect(() => {
+    if (userStatus.isLoggedIn) {
+      const fetchData = async () => {
+        try {
+          let recipes = await fetchTruncRecipes();
+          setTruncRecipes([...recipes]);
+        } catch (error) {
+          console.log("error", error);
+        }
+        try {
+          let tags = await fetchUserTags();
+          setUserTags([allTag, ...tags]);
+        } catch (error) {
+          console.log("error", error);
+        }
+      };
+      fetchData();
+    }
+  }, [userStatus]);
 
   // console.log("userStatus", userStatus);
 
