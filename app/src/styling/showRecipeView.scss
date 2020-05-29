@@ -3,4 +3,64 @@
 
 .recipe-wrapper {
   @include full-page-card;
+  h1 {
+    margin: 0 0 1em;
+  }
+  h4 {
+    margin-top: 1em;
+  }
+  p {
+    margin: 0 1em;
+  }
+  .source-label,
+  .ingredients-label,
+  .instructions-label,
+  .tags-label,
+  .notes-label {
+    font-weight: bold;
+    color: color(dark);
+    padding: 0.5em 0;
+    font-size: 1.2em;
+  }
+  .recipe-title {
+    text-align: center;
+  }
+  .recipe-source {
+    display: flex;
+    align-items: baseline;
+  }
+  .order-num {
+    color: color(dark);
+    font-weight: bold;
+  }
+
+  .dot {
+    font-size: 0.4em;
+    color: color(dark);
+    vertical-align: sub;
+    margin: 1em;
+  }
+  .tag {
+    @include tags;
+    color: color(dark);
+    // @include active-tag;
+    pointer-events: none;
+    font-weight: bolder;
+  }
+  .icons {
+    text-align: right;
+  }
+  .icon-edit {
+    @include icon-normal;
+    color: color(dark2);
+    font-size: 2em;
+    margin-right: 1em;
+  }
+  .delete-button {
+    @include hidden-button-mixin;
+    .icon-trash {
+      @include icon-warning;
+      font-size: 2em;
+    }
+  }
 }

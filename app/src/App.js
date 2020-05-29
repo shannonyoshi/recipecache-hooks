@@ -7,6 +7,8 @@ import SignUp from "./views/signup";
 import ShowRecipe from "./views/showRecipe";
 import RecipeFormView from "./views/recipeFormView";
 
+//TODO: set up private routes/ redirects, fix useEffect for fetching to ensure new recipes show up without having to force page refresh
+
 import { fetchTruncRecipes, fetchUserTags } from "./util/recipeFuncs";
 import { fetchUserStatus } from "./util/authFuncs";
 
@@ -19,6 +21,7 @@ import {
   faArrowAltCircleDown,
   faPlusCircle,
   faCheckCircle,
+  faDotCircle,
 } from "@fortawesome/free-solid-svg-icons";
 library.add(
   faTrashAlt,
@@ -26,7 +29,8 @@ library.add(
   faArrowAltCircleUp,
   faArrowAltCircleDown,
   faPlusCircle,
-  faCheckCircle
+  faCheckCircle,
+  faDotCircle
 );
 
 const App = () => {
@@ -37,12 +41,8 @@ const App = () => {
     source: "",
     notes: "",
     tags: [],
-    ingredients: [{ text: "" }, { text: "" }, { text: "" }],
-    instructions: [
-      { text: "", order: 1 },
-      { text: "", order: 2 },
-      { text: "", order: 3 },
-    ],
+    ingredients: [],
+    instructions: [],
   };
 
   const [userTags, setUserTags] = useState([allTag]);
@@ -53,9 +53,9 @@ const App = () => {
   });
   const [truncRecipes, setTruncRecipes] = useState([]);
   const [fullRecipe, setFullRecipe] = useState(emptyFullRecipe);
-
+  const [addRecipe, setAddRecipe] = useState(emptyFullRecipe);
   useEffect(() => {
-    console.log("USE EFFECT");
+    console.log("USE EFFECT APP, fetch status");
     const fetchStatus = async () => {
       try {
         const authStatus = await fetchUserStatus();
@@ -64,24 +64,12 @@ const App = () => {
       } catch (error) {
         console.log("error", error);
       }
-      // try {
-      //   let recipes = await fetchTruncRecipes();
-      //   setTruncRecipes([...recipes]);
-      //   // console.log("recipes", recipes);
-      // } catch (error) {
-      //   console.log("error", error);
-      // }
-      // try {
-      //   let tags = await fetchUserTags();
-      //   setUserTags([allTag, ...tags]);
-      // } catch (error) {
-      //   console.log("error", error);
-      // }
     };
     fetchStatus();
   }, []);
 
   useEffect(() => {
+    console.log("USE EFFECT APP fetch recipes");
     if (userStatus.isLoggedIn) {
       const fetchData = async () => {
         try {
@@ -164,9 +152,8 @@ const App = () => {
           render={(props) => (
             <RecipeFormView
               {...props}
-              fullRecipe={fullRecipe}
-              setFullRecipe={setFullRecipe}
-              emptyFullRecipe={emptyFullRecipe}
+              fullRecipe={addRecipe}
+              setFullRecipe={setAddRecipe}
               userTags={userTags}
             />
           )}

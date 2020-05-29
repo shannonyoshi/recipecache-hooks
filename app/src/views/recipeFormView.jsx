@@ -7,19 +7,53 @@ import { fetchFullRecipe, fetchStandardTags } from "../util/recipeFuncs";
 import "../styling/recipeFormView.scss";
 
 const RecipeFormView = (props) => {
-  const { setFullRecipe, fullRecipe, emptyFullRecipe, userTags } = props;
+  const { setFullRecipe, fullRecipe, userTags } = props;
   const [allTags, setAllTags] = useState([]);
   const page = props.match.path;
+  // let recipe = null
+  // let setRecipe=null
+  // if (page === "/add") {
+  //   recipe=props.addRecipe
+  //   setRecipe = props.setAddRecipe
+  // } else {
+  //   recipe = props.fullRecipe,
+  //   setRecipe=props.setFullRecipe
+  // }
+  const emptyFullRecipe = {
+    id: null,
+    title: "",
+    source: "",
+    notes: "",
+    tags: [],
+    ingredients: [
+      { text: "", id: null },
+      { text: "", id: null },
+      { text: "", id: null },
+    ],
+    instructions: [
+      { text: "", id: null, order: 1 },
+      { text: "", id: null, order: 2 },
+      { text: "", id: null, order: 3 },
+    ],
+  };
   useEffect(() => {
     if (allTags.length === 0) {
       const getStandardTags = async () => {
         const tags = await fetchStandardTags();
+        console.log("tags", tags);
         if (tags) {
-          const mergedTags = [...tags, ...userTags];
+          const customUser = userTags.filter(
+            (tag) => tag.isCustom !== 0 && tag.isCustom !== false
+          );
+          console.log("userTags", userTags);
+          console.log("customUser", customUser);
+          const mergedTags = [...tags, ...customUser];
+          // console.log("mergedTags", mergedTags);
           const uniqueMergedTags = mergedTags.filter(
             (tag, index) =>
               mergedTags.indexOf(tag) === index && tag.text !== "All"
           );
+          // console.log("uniqueMergedTags", uniqueMergedTags);
           setAllTags([...uniqueMergedTags]);
         }
       };
@@ -41,6 +75,7 @@ const RecipeFormView = (props) => {
 
   return (
     <div>
+      {}
       <Header />
       {page === "/add" ? <h1>Add Recipe</h1> : <h1>Edit Recipe</h1>}
       <RecipeForm

@@ -4,58 +4,62 @@ import { Link } from "react-router-dom";
 
 const fullRecipe = (props) => {
   const { fullRecipe } = props;
-  // console.log("fullRecipe", fullRecipe);
+  console.log("fullRecipe", fullRecipe);
+  // console.log("fullRecipe.instructions length", fullRecipe.instructions.length);
   return (
     <div className="recipe-wrapper">
-      <p>{fullRecipe.title}</p>
+      <h1 className="recipe-title">{fullRecipe.title}</h1>
       {fullRecipe.source.length > 0 ? (
-        <p>
-          <span className="recipe-label">Source:</span>
-          {fullRecipe.source}
-        </p>
-      ) : (
-        <></>
-      )}
+        <div className="recipe-source">
+          <h4 className="source-label">Source:</h4>
+          <p>{fullRecipe.source}</p>
+        </div>
+      ) : null}
 
-      <div className="ingredient list">
-        <p>Ingredients:</p>
+      <div className="ingredient-list">
+        <h4 className="ingredients-label">Ingredients:</h4>
         {fullRecipe.ingredients.map((ingredient) => (
-          <p key={`ingr ${ingredient.id}`}>{ingredient.text}</p>
+          <p key={`ingr ${ingredient.id}`} className="ingredient">
+            <FontAwesomeIcon icon="dot-circle" className="dot" />
+            {ingredient.text}
+          </p>
         ))}
       </div>
-      <div className="instruction list">
-        <p>Instructions:</p>
+      <div className="instruction-list">
+        <h4 className="instructions-label">Instructions:</h4>
         {fullRecipe.instructions.map((instruction) => (
-          <p key={`inst ${instruction.id}`}>
-            <span>{instruction.order}. </span>
+          <p className="instruction" key={`inst ${instruction.id}`}>
+            <span className="order-num">{instruction.order}. </span>
             {instruction.text}
           </p>
         ))}
       </div>
       {fullRecipe.tags.length > 0 ? (
-        <div className="tags list">
-          <p>Tags:</p>
-          {fullRecipe.tags.map((tag) => (
-            <span key={tag.id}>{tag.text}</span>
-          ))}
+        <div className="tags-list">
+          <h4 className="tags-label">Tags:</h4>
+          <div className="tags">
+            {fullRecipe.tags.map((tag) => (
+              <span key={tag.id} className="tag">
+                {tag.text}
+              </span>
+            ))}
+          </div>
         </div>
-      ) : (
-        <></>
-      )}
+      ) : null}
 
       {fullRecipe.notes.length > 0 ? (
-        <p>
-          <span>Notes: </span>
-          {fullRecipe.notes}
-        </p>
-      ) : (
-        <></>
-      )}
+        <div>
+          <h4 className="notes-label">Notes: </h4>
+          <p>{fullRecipe.notes}</p>
+        </div>
+      ) : null}
       <div className="icons">
         <Link to={`/edit/${fullRecipe.id}`}>
-          <FontAwesomeIcon icon="edit" />
+          <FontAwesomeIcon icon="edit" className="icon-edit" />
         </Link>
-        <FontAwesomeIcon icon="trash-alt" />
+        <button className="delete-button">
+          <FontAwesomeIcon icon="trash-alt" className="icon-trash" />
+        </button>
       </div>
     </div>
   );

@@ -43,8 +43,6 @@
 }
 
 @mixin tags {
-  // border: 1px solid color(dark);
-
   border: none;
   box-shadow: inset 0 0 0 1px rgba(28, 154, 164, 0.3);
   padding: 0.2em 0.4em;
@@ -53,7 +51,6 @@
   text-align: center;
   width: auto;
   background-color: white;
-  // font-weight: bold;
   transition: 0.3s;
   &:hover {
     color: darken(color(dark), 10);
@@ -83,10 +80,36 @@
 
 @mixin full-page-card {
   @include card;
-  padding: 2em;
-  widows: 80%;
-  margin: auto;
+  width: 80%;
+  max-width: 950px;
+  margin: 4em auto;
   text-align: left;
+  padding: 5em 10%;
+}
+
+@mixin hidden-button-mixin {
+  border: none;
+  text-decoration: none;
+  background: transparent;
+  font-size: 1em;
+}
+@mixin icon-normal {
+  color: darken(color(medium), 10);
+  transition: 0.3s;
+  &:hover {
+    color: color(dark);
+  }
+}
+@mixin icon-warning {
+  color: color(warning);
+  transition: 0.3s;
+  &:hover {
+    color: tint(color(warning), red, 70);
+  }
+}
+
+@function tint($tint, $color, $percent) {
+  @return mix($tint, $color, $percent);
 }
 
 $phone-breakpoint: 550px;

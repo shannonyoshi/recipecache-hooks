@@ -20,16 +20,9 @@
   }
 
   .icon-button {
-    border: none;
-    text-decoration: none;
-    background: transparent;
-    font-size: 1em;
+    @include hidden-button-mixin;
     .icon {
-      color: darken(color(medium), 10);
-      transition: 0.3s;
-      &:hover {
-        color: color(dark);
-      }
+      @include icon-normal;
     }
     .medium {
       font-size: 1.5em;
