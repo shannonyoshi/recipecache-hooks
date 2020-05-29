@@ -1,22 +1,24 @@
 const db = require("../data/dbConfig");
 
 module.exports = {
+  //get
   getUniqueUserTags,
   getTruncated,
   getFull,
   getStandardTags,
+  //post
   addTruncRecipe,
   addIngredients,
   addInstructions,
-  updateTruncRecipe,
   addTagsNewRecipe,
-
-  //   add,
-  //   remove,
-  //   update,
+  //put
+  updateTruncRecipe,
 };
 
+//TODO: ADD ERROR HANDLING
+
 // TODO: functions to write:
+
 /*    
   updateRecipe:
   X  updateTruncRecipe,
@@ -36,19 +38,24 @@ module.exports = {
 //exported functions
 async function getUniqueUserTags(userId) {
   console.log("getUniqueUserTags userId", userId);
-  let allUserTags = await getUserTags(userId);
+  try {
+    let allUserTags = await getUserTags(userId);
 
-  const uniqueTagSet = new Set();
-  const uniqueTags = [];
+    const uniqueTagSet = new Set();
+    const uniqueTags = [];
 
-  for (let index in allUserTags) {
-    let currTag = allUserTags[index];
-    if (!uniqueTagSet.has(currTag["text"])) {
-      uniqueTags.push(currTag);
-      uniqueTagSet.add(currTag["text"]);
+    for (let index in allUserTags) {
+      let currTag = allUserTags[index];
+      if (!uniqueTagSet.has(currTag["text"])) {
+        uniqueTags.push(currTag);
+        uniqueTagSet.add(currTag["text"]);
+      }
     }
+    return uniqueTags;
+  } catch {
+    e;
   }
-  return uniqueTags;
+  return false;
 }
 
 async function getTruncated(userId) {

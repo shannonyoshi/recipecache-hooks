@@ -90,20 +90,26 @@ router.post("/add", async (req, res) => {
   console.log("fullRecipe", fullRecipe);
   const recipeId = await Recipes.addTruncRecipe(fullRecipe, userId);
   if (recipeId) {
+    let badResponses = [];
+    //TODO: add bad responses and check them before sending response
     if (fullRecipe.ingredients) {
-      await Recipes.addIngredients(fullRecipe.ingredients, recipeId);
+      const response = await Recipes.addIngredients(
+        fullRecipe.ingredients,
+        recipeId
+      );
     }
     if (fullRecipe.instructions) {
-      await Recipes.addInstructions(fullRecipe.instructions, recipeId);
+      responses["instructions"] = await Recipes.addInstructions(
+        fullRecipe.instructions,
+        recipeId
+      );
     }
     if (fullRecipe.tags) {
-      await Recipes.addTagsNewRecipe(fullRecipe.tags, recipeId, userId);
-      // const newTags = fullRecipe.tags.filter((tag) => !tag.id);
-      // const addedTagIds = await Recipes.createCustomTags(newTags);
-      // const otherTags = fullRecipe.tags.filter((tag) => tag.id);
-      // for (let i = 0; i < otherTags.length; i++) {
-      //   addedTagIds.push(otherTags[i].id);
-      // }
+      responses["tags"] = await Recipes.addTagsNewRecipe(
+        fullRecipe.tags,
+        recipeId,
+        userId
+      );
     }
   }
 });

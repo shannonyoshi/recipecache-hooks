@@ -33,9 +33,8 @@ router.post("/register", async (req, res) => {
     if (addedUserArray) {
       const addedUser = addedUserArray[0];
       req.session.userId = addedUser.id;
-      //req.session.save();
-      console.log("addedUser", addedUser);
-      // console.log("REGISTER req.session", req.session);
+      // console.log("addedUser", addedUser);
+      console.log("REGISTER req.session", req.session);
       res.status(201).json({ message: "User added" });
     } else {
       res.status(401);
@@ -59,7 +58,6 @@ router.post("/login", async (req, res) => {
     console.log("user", user);
     if (user && bcrypt.compareSync(password, user.password)) {
       req.session.userId = user.id;
-      // req.session.save();
       console.log("LOGIN req.session", req.session);
       res.status(200).end();
     } else {
