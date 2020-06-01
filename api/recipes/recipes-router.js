@@ -97,6 +97,9 @@ router.post("/add", async (req, res) => {
         fullRecipe.ingredients,
         recipeId
       );
+      if (!response) {
+        badResponses.push("ingredients");
+      }
     }
     if (fullRecipe.instructions) {
       responses["instructions"] = await Recipes.addInstructions(

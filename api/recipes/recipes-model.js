@@ -60,18 +60,24 @@ async function getUniqueUserTags(userId) {
 
 async function getTruncated(userId) {
   console.log("getTruncated userId", userId);
-  let truncRecipes = await db("recipes").where({ user_id: userId });
-  for (let index in truncRecipes) {
-    const recipeId = truncRecipes[index]["id"];
-    truncRecipes[index]["tags"] = await getRecipeTags(recipeId);
+  try {
+    let truncRecipes = await db("recipes").where({ user_id: userId });
+    for (let index in truncRecipes) {
+      const recipeId = truncRecipes[index]["id"];
+      truncRecipes[index]["tags"] = await getRecipeTags(recipeId);
+    }
+    return truncRecipes;
+  } catch (error) {
+    console.log("error", error);
+    return null;
   }
-  return truncRecipes;
 }
 
 async function getFull(recipeId) {
-  let recipe = await db("recipes").where({ id: recipeId });
-  recipe = recipe[0];
-  if (recipe) {
+  try {
+    let recipe = await db("recipes").where({ id: recipeId });
+    recipe = recipe[0];
+    // if (recipe) {
     const ingredients = await getIngredients(recipeId);
     const instructions = await getInstructions(recipeId);
     const tags = await getRecipeTags(recipeId);
@@ -79,16 +85,26 @@ async function getFull(recipeId) {
     recipe["instructions"] = instructions;
     recipe["tags"] = tags;
     return recipe;
-  } else {
+    // }
+    //  else {
+    //   return null;
+    // }
+  } catch (error) {
+    console.log("error", error);
     return null;
   }
 }
 
 async function getStandardTags() {
-  const standardTags = await db("tags")
-    .where({ isCustom: false })
-    .select("tags.text", "tags.id", "tags.isCustom");
-  return standardTags;
+  try {
+    const standardTags = await db("tags")
+      .where({ isCustom: false })
+      .select("tags.text", "tags.id", "tags.isCustom");
+    return standardTags;
+  } catch (error) {
+    console.log("error", error);
+    return null;
+  }
 }
 
 async function addTruncRecipe(fullRecipe, userId) {
@@ -98,23 +114,38 @@ async function addTruncRecipe(fullRecipe, userId) {
     source: fullRecipe.source,
     notes: fullRecipe.notes,
   };
-  let recipeId = await db("recipes").insert(truncRecipe, "id");
-  console.log("recipeId in recipes-model", recipeId);
-  return recipeId[0];
+  try {
+    let recipeId = await db("recipes").insert(truncRecipe, "id");
+    // console.log("recipeId in recipes-model", recipeId);
+    return recipeId[0];
+  } catch (error) {
+    console.log("error", error);
+    return null;
+  }
 }
 //ingredients do not have recipeId added yet
 async function addIngredients(ingredients, recipeId) {
   const ingArray = addProperty(ingredients, "recipe_id", recipeId);
-  const response = await db("ingredients").insert(ingArray);
-  console.log("addIngredient response", response);
-  return response;
+  try {
+    const response = await db("ingredients").insert(ingArray);
+    console.log("addIngredient response", response);
+    return response;
+  } catch (error) {
+    console.log("error", error);
+    return null;
+  }
 }
 //instructions do not have recipeId added yet
 async function addInstructions(instructions, recipeId) {
   const instArray = addProperty(instructions, "recipe_id", recipeId);
-  const response = await db("instructions").insert(instArray);
-  console.log("addInstruction response", response);
-  return response;
+  try {
+    const response = await db("instructions").insert(instArray);
+    console.log("addInstruction response", response);
+    return response;
+  } catch (error) {
+    console.log("error", error);
+    return null;
+  }
 }
 
 async function addTagsNewRecipe(allTags, recipeId, userId) {
@@ -132,7 +163,7 @@ async function addTagsNewRecipe(allTags, recipeId, userId) {
   const tagsWRecId = addProperty(tagIds, "recipe_id", recipeId);
   const preppedTags = addProperty(tagsWRecId, "user_id", userId);
   console.log("preppedTags", preppedTags);
-  await addTagsRecipes(preppedTags);
+  return await addTagsRecipes(preppedTags);
 }
 
 async function updateTruncRecipe(fullRecipe) {
@@ -144,10 +175,21 @@ async function updateTruncRecipe(fullRecipe) {
   return db("recipes").where({ id: fullRecipe.id }).update(truncChanges);
 }
 
+async function delCustomTag(tagId) {
+  const tag = db("tags").where({ id: tagId }).where({ isCustom: 1 });
+  console.log("tag", tag);
+  //TODO: after testing query, delete tag
+}
+
 //helper functions
 
 const addTagsRecipes = async (tags) => {
-  await db("tags_recipes").insert(tags);
+  try {
+    await db("tags_recipes").insert(tags);
+  } catch (error) {
+    console.log("error", error);
+    return null;
+  }
 };
 
 const createCustomTags = async (tags) => {
@@ -171,35 +213,55 @@ const addProperty = (array, propertyName, propertyValue) => {
 };
 
 const getInstructions = async (recipeId) => {
-  let instructions = await db("instructions")
-    .join("recipes", "recipes.id", "instructions.recipe_id")
-    .select("instructions.text", "instructions.order", "instructions.id")
-    .where({ "instructions.recipe_id": recipeId });
-  return instructions;
+  try {
+    let instructions = await db("instructions")
+      .join("recipes", "recipes.id", "instructions.recipe_id")
+      .select("instructions.text", "instructions.order", "instructions.id")
+      .where({ "instructions.recipe_id": recipeId });
+    return instructions;
+  } catch (error) {
+    console.log("error", error);
+    return null;
+  }
 };
 
 const getIngredients = async (recipeId) => {
-  let ingredients = await db("ingredients")
-    .join("recipes", "recipes.id", "ingredients.recipe_id")
-    .select("ingredients.text", "ingredients.id")
-    .where({ "ingredients.recipe_id": recipeId });
-  return ingredients;
+  try {
+    let ingredients = await db("ingredients")
+      .join("recipes", "recipes.id", "ingredients.recipe_id")
+      .select("ingredients.text", "ingredients.id")
+      .where({ "ingredients.recipe_id": recipeId });
+    return ingredients;
+  } catch (error) {
+    console.log("error", error);
+    return null;
+  }
 };
 
 const getRecipeTags = async (recipeId) => {
   console.log("getRecipeTags recipeId", recipeId);
-  let tags = await db("tags_recipes")
-    .join("tags", "tags.id", "tags_recipes.tag_id")
-    .where({ "tags_recipes.recipe_id": recipeId })
-    .select("tags.text", "tags.id", "tags.isCustom");
-  return tags;
+  try {
+    let tags = await db("tags_recipes")
+      .join("tags", "tags.id", "tags_recipes.tag_id")
+      .where({ "tags_recipes.recipe_id": recipeId })
+      .select("tags.text", "tags.id", "tags.isCustom");
+    return tags;
+  } catch (error) {
+    console.log("error", error);
+    return null;
+  }
 };
 
 const getUserTags = async (userId) => {
   console.log("getUserTags userId", userId);
-  let userTags = await db("tags_recipes")
-    .join("tags", "tags.id", "tags_recipes.tag_id")
-    .select("tags.text", "tags.isCustom", "tags.id")
-    .where({ "tags_recipes.user_id": userId });
-  return userTags;
+  try {
+    let userTags = await db("tags_recipes")
+      .join("tags", "tags.id", "tags_recipes.tag_id")
+      .select("tags.text", "tags.isCustom", "tags.id")
+      .where({ "tags_recipes.user_id": userId });
+    return userTags;
+  } catch (error) {
+    console.log("error", error);
+    return null;
+  }
 };
