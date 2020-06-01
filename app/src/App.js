@@ -23,6 +23,7 @@ import {
   faCheckCircle,
   faDotCircle,
 } from "@fortawesome/free-solid-svg-icons";
+import { faSave, faTimesCircle } from "@fortawesome/free-regular-svg-icons";
 library.add(
   faTrashAlt,
   faEdit,
@@ -30,7 +31,9 @@ library.add(
   faArrowAltCircleDown,
   faPlusCircle,
   faCheckCircle,
-  faDotCircle
+  faDotCircle,
+  faSave,
+  faTimesCircle
 );
 
 const App = () => {
