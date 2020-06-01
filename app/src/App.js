@@ -6,6 +6,7 @@ import LogIn from "./views/login";
 import SignUp from "./views/signup";
 import ShowRecipe from "./views/showRecipe";
 import RecipeFormView from "./views/recipeFormView";
+import TagEditView from "./views/tagEditView";
 
 //TODO: set up private routes/ redirects, fix useEffect for fetching to ensure new recipes show up without having to force page refresh
 
@@ -138,6 +139,10 @@ const App = () => {
               setFullRecipe={setFullRecipe}
             />
           )}
+        />
+        <Route
+          path="/edit-tags"
+          render={(props) => <TagEditView {...props} userTags={userTags} />}
         />
         <Route
           path="/edit/:id"
