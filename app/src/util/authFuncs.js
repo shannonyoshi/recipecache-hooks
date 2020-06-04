@@ -50,3 +50,12 @@ export const fetchUserStatus = async () => {
     console.log("e", e);
   }
 };
+
+export const logoutUser = async () => {
+  console.log("logout");
+  try {
+    await fetch(`${URL}/api/auth/logout`);
+  } catch (e) {
+    console.log("e", e);
+  }
+};

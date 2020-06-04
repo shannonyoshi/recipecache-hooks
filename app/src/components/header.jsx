@@ -1,5 +1,6 @@
 import React from "react";
 import { NavLink, Link } from "react-router-dom";
+import { logoutUser } from "../util/authFuncs";
 
 import "../styling/header.scss";
 
@@ -27,12 +28,9 @@ const Header = () => {
           activeClassName="active-nav">
           Add Recipe
         </NavLink>
-        <NavLink
-          to="/log-out"
-          className="inactive-nav"
-          activeClassName="active-nav">
+        <button className="inactive-nav" onClick={logoutUser}>
           Log Out
-        </NavLink>
+        </button>
       </nav>
     </header>
   );

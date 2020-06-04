@@ -7,17 +7,27 @@ const RecipeDashboard = (props) => {
   // console.log("Dashboard truncRecipes", truncRecipes);
   const [showRecipes, setShowRecipes] = useState([...truncRecipes]);
   useEffect(() => {
-    // console.log("useEffect");
     filterRecipes();
   }, [selectedTag, truncRecipes]);
 
   const filterRecipes = () => {
-    // console.log("Filter");
-    // console.log("selectedTag", selectedTag);
     if (selectedTag.text === "All") {
       setShowRecipes([...truncRecipes]);
     } else {
-      // console.log("Else: selectedTag", selectedTag);
+      let filteredRecipes = [];
+      for (let i = 0; i < truncRecipes.length; i++) {
+        if (truncRecipes[i].tags.length > 0) {
+          //   console.log("truncRecipes[i].tags", truncRecipes[i].tags);
+          let tagsMatch = truncRecipes[i].tags.some(
+            (tag) => tag.id === selectedTag.id
+          );
+          if (tagsMatch) {
+            filteredRecipes.push(truncRecipes[i]);
+          }
+        }
+      }
+      // console.log("filteredRecipes", filteredRecipes);
+      setShowRecipes(filteredRecipes);
     }
   };
   // console.log("showRecipes", showRecipes);

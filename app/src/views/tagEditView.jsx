@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import TagEdit from "../components/tagEdit";
-
+import Header from "../components/header";
 const TagEditView = (props) => {
   const { userTags } = props;
   const [customTags, setCustomTags] = useState([]);
@@ -12,6 +12,7 @@ const TagEditView = (props) => {
   }, [userTags]);
   return (
     <div>
+      <Header />
       {customTags.length === 0 ? (
         <p>We didn't find any custom tags to edit</p>
       ) : (
