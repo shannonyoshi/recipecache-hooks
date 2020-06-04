@@ -5,9 +5,9 @@ const Users = require("./auth-model");
 
 /* Endpoints: 
     TODO:
-      GET  /status     checks for cookies to see if use is logged in
+    X  GET  /status     checks for cookies to see if use is logged in
     X POST /register   adds new user to DB, encrypts password, adds redis cookie
-      POST /log-in     creates redis user session
+    X  POST /log-in     creates redis user session
       POST /logout     deletes user session
     LATER:  
       PUT  /updatePw   updates and encrypts password
@@ -66,6 +66,15 @@ router.post("/login", async (req, res) => {
   } catch (e) {
     console.log("e", e);
     res.status(500).json({ message: "Server error occurred" });
+  }
+});
+
+router.get("/logout", async (req, res) => {
+  if (req.session) {
+    req.session.destroy();
+    res.status(200).end();
+  } else {
+    res.status(400).end();
   }
 });
 

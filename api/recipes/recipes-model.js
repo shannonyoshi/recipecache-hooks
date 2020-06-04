@@ -13,6 +13,7 @@ module.exports = {
   addTagsNewRecipe,
   //put
   updateTruncRecipe,
+  //tags, instructions, ingredients,
 };
 
 //TODO: ADD ERROR HANDLING
@@ -46,14 +47,14 @@ async function getUniqueUserTags(userId) {
 
     for (let index in allUserTags) {
       let currTag = allUserTags[index];
-      if (!uniqueTagSet.has(currTag["text"])) {
+      if (!uniqueTagSet.has(currTag["id"])) {
         uniqueTags.push(currTag);
-        uniqueTagSet.add(currTag["text"]);
+        uniqueTagSet.add(currTag["id"]);
       }
     }
     return uniqueTags;
-  } catch {
-    e;
+  } catch (e) {
+    console.log("e", e);
   }
   return false;
 }
@@ -77,7 +78,6 @@ async function getFull(recipeId) {
   try {
     let recipe = await db("recipes").where({ id: recipeId });
     recipe = recipe[0];
-    // if (recipe) {
     const ingredients = await getIngredients(recipeId);
     const instructions = await getInstructions(recipeId);
     const tags = await getRecipeTags(recipeId);
@@ -85,10 +85,6 @@ async function getFull(recipeId) {
     recipe["instructions"] = instructions;
     recipe["tags"] = tags;
     return recipe;
-    // }
-    //  else {
-    //   return null;
-    // }
   } catch (error) {
     console.log("error", error);
     return null;

@@ -7,20 +7,20 @@ x      GET /full/:recipeId   gets 1 full recipe
 x      GET /trunc/:userId    gets a list of truncated recipes for that user
 x      GET /userTags/:userId  gets list of tags (including custom for that user)
 x      GET /standardTags      gets list of standard tags
-      POST /add              adds new recipe(truncated, ingredients, instructions, tags, tags_recipes)
+x      POST /add              adds new recipe(truncated, ingredients, instructions, tags, tags_recipes)
       PUT /update            updates existing recipe
 */
 //TODO: once redis is set up, update userId endpoints to use cookies instead of param
 router.get("/full/:recipeId", async (req, res) => {
   console.log("GET FULL RECIPE");
   const recipeId = req.params.recipeId;
-  console.log("recipeId", recipeId);
+  // console.log("recipeId", recipeId);
   let recipe = null;
   try {
     recipe = await Recipes.getFull(recipeId);
-    console.log("recipe in GET", recipe);
+    // console.log("recipe in GET", recipe);
   } catch (error) {
-    console.log("error", error);
+    // console.log("error", error);
     res
       .status(500)
       .json({ message: "An error occurred while trying to retrieve recipe" });
@@ -34,7 +34,7 @@ router.get("/full/:recipeId", async (req, res) => {
 
 router.get("/trunc", async (req, res) => {
   const userId = req.session.userId;
-  console.log("GET TRUNC req.session", req.session);
+  // console.log("GET TRUNC req.session", req.session);
   let truncatedRecipes = null;
   try {
     truncatedRecipes = await Recipes.getTruncated(userId);
@@ -125,6 +125,10 @@ router.post("/edit", async (req, res) => {
 
   const recipe = await Recipes.updateTruncRecipe(fullRecipe);
   console.log("recipe", recipe);
+});
+
+router.post("/delete", async (req, res) => {
+  const { type, ids } = req.body;
 });
 
 module.exports = router;
