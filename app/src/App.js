@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { Route, Switch } from "react-router-dom";
+import { Route, Switch, Redirect } from "react-router-dom";
 import "./styling/App.scss";
 import Home from "./views/home";
 import LogIn from "./views/login";
 import SignUp from "./views/signup";
-import ShowRecipe from "./views/showRecipe";
+import ShowRecipeView from "./views/showRecipeView";
 import RecipeFormView from "./views/recipeFormView";
 import TagEditView from "./views/tagEditView";
+import PrivateRoute from "./components/privateRoute";
 
 //TODO: set up private routes/ redirects, fix useEffect for fetching to ensure new recipes show up without having to force page refresh
 
@@ -48,7 +49,7 @@ const App = () => {
     ingredients: [],
     instructions: [],
   };
-
+  //state variables
   const [userTags, setUserTags] = useState([allTag]);
   const [selectedTag, setSelectedTag] = useState(allTag);
   const [userStatus, setUserStatus] = useState({
@@ -58,6 +59,7 @@ const App = () => {
   const [truncRecipes, setTruncRecipes] = useState([]);
   const [fullRecipe, setFullRecipe] = useState(emptyFullRecipe);
   const [addRecipe, setAddRecipe] = useState(emptyFullRecipe);
+
   useEffect(() => {
     console.log("USE EFFECT APP, fetch status");
     const fetchStatus = async () => {
@@ -98,18 +100,7 @@ const App = () => {
   return (
     <div className="App">
       <Switch>
-        <Route
-          path="/home/:tag?"
-          render={(props) => (
-            <Home
-              {...props}
-              truncRecipes={truncRecipes}
-              userTags={userTags}
-              selectedTag={selectedTag}
-              setSelectedTag={setSelectedTag}
-            />
-          )}
-        />
+        <Redirect exact from="/" to="/home" />
         <Route
           path="/log-in"
           render={(props) => (
@@ -130,41 +121,50 @@ const App = () => {
             />
           )}
         />
-        <Route
+        <PrivateRoute
+          path="/home"
+          component={Home}
+          isLoggedIn={userStatus.isLoggedIn}
+          truncRecipes={truncRecipes}
+          userTags={userTags}
+          selectedTag={selectedTag}
+          setSelectedTag={setSelectedTag}
+          setUserStatus={setUserStatus}
+        />
+        <PrivateRoute
           path="/view/:id"
-          render={(props) => (
-            <ShowRecipe
-              {...props}
-              fullRecipe={fullRecipe}
-              setFullRecipe={setFullRecipe}
-            />
-          )}
+          component={ShowRecipeView}
+          isLoggedIn={userStatus.isLoggedIn}
+          fullRecipe={fullRecipe}
+          setFullRecipe={setFullRecipe}
+          setUserStatus={setUserStatus}
         />
-        <Route
+        <PrivateRoute
           path="/edit-tags"
-          render={(props) => <TagEditView {...props} userTags={userTags} />}
+          component={TagEditView}
+          isLoggedIn={userStatus.isLoggedIn}
+          setUserStatus={setUserStatus}
+          userTags={userTags}
         />
-        <Route
+
+        <PrivateRoute
           path="/edit/:id"
-          render={(props) => (
-            <RecipeFormView
-              {...props}
-              fullRecipe={fullRecipe}
-              setFullRecipe={setFullRecipe}
-              userTags={userTags}
-            />
-          )}
+          component={RecipeFormView}
+          isLoggedIn={userStatus.isLoggedIn}
+          setUserStatus={setUserStatus}
+          fullRecipe={fullRecipe}
+          setFullRecipe={setFullRecipe}
+          userTags={userTags}
         />
-        <Route
+
+        <PrivateRoute
           path="/add"
-          render={(props) => (
-            <RecipeFormView
-              {...props}
-              fullRecipe={addRecipe}
-              setFullRecipe={setAddRecipe}
-              userTags={userTags}
-            />
-          )}
+          isLoggedIn={userStatus.isLoggedIn}
+          component={RecipeFormView}
+          fullRecipe={addRecipe}
+          setFullRecipe={setAddRecipe}
+          userTags={userTags}
+          setUserStatus={setUserStatus}
         />
       </Switch>
     </div>

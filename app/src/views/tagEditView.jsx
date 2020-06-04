@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import TagEdit from "../components/tagEdit";
 import Header from "../components/header";
 const TagEditView = (props) => {
-  const { userTags } = props;
+  const { userTags, setUserStatus } = props;
   const [customTags, setCustomTags] = useState([]);
   useEffect(() => {
     const tagsToEdit = userTags.filter((tag) => tag.isCustom !== 0);
@@ -12,7 +12,7 @@ const TagEditView = (props) => {
   }, [userTags]);
   return (
     <div>
-      <Header />
+      <Header setUserStatus={setUserStatus} />
       {customTags.length === 0 ? (
         <p>We didn't find any custom tags to edit</p>
       ) : (

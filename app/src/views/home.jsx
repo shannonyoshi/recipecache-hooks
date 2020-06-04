@@ -6,12 +6,18 @@ import RecipeDashboard from "../components/recipeDashboard";
 import "../styling/homeView.scss";
 
 const Home = (props) => {
-  const { truncRecipes, userTags, selectedTag, setSelectedTag } = props;
+  const {
+    truncRecipes,
+    userTags,
+    selectedTag,
+    setSelectedTag,
+    setUserStatus,
+  } = props;
 
   // console.log("props", props);
   return (
     <div>
-      <Header />
+      <Header setUserStatus={setUserStatus} />
       <TagSearch
         userTags={userTags}
         selectedTag={selectedTag}

@@ -4,7 +4,14 @@ import { logoutUser } from "../util/authFuncs";
 
 import "../styling/header.scss";
 
-const Header = () => {
+const Header = (props) => {
+  const { setUserStatus } = props;
+
+  const logout = () => {
+    logoutUser();
+    setUserStatus({ isLoggedIn: false, error: null });
+  };
+
   return (
     <header className="header">
       {/* need to changes css, in original, this is wrapped in nav, not header tag */}
@@ -28,7 +35,7 @@ const Header = () => {
           activeClassName="active-nav">
           Add Recipe
         </NavLink>
-        <button className="inactive-nav" onClick={logoutUser}>
+        <button className="inactive-nav" onClick={logout}>
           Log Out
         </button>
       </nav>

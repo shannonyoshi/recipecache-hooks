@@ -1,13 +1,20 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { loginUser } from "../util/authFuncs";
 
 const initInputState = { email: "", password: "" };
 
-const LogInForm = () => {
+const LogInForm = (props) => {
+  const { userStatus, setUserStatus } = props;
   const [inputs, setInputs] = useState(initInputState);
   const [error, setError] = useState(null);
   let history = useHistory();
+
+  useEffect(() => {
+    if (userStatus.isLoggedIn) {
+      history.push("/home");
+    }
+  }, [userStatus]);
 
   const handleChange = (e) => {
     e.persist();
@@ -19,9 +26,10 @@ const LogInForm = () => {
     e.preventDefault();
     setError(null);
     const response = await loginUser(inputs);
+    console.log("log in response", response);
     if (response === 200) {
       setInputs(initInputState);
-      history.push("/home");
+      setUserStatus({ isLoggedIn: true, error: null });
     } else {
       setError(response);
     }

@@ -7,7 +7,8 @@ import { fetchFullRecipe, fetchStandardTags } from "../util/recipeFuncs";
 import "../styling/recipeFormView.scss";
 
 const RecipeFormView = (props) => {
-  const { setFullRecipe, fullRecipe, userTags } = props;
+  console.log("recipeFormView props", props);
+  const { setFullRecipe, fullRecipe, userTags, setUserStatus } = props;
   const [allTags, setAllTags] = useState([]);
   const page = props.match.path;
   // let recipe = null
@@ -76,7 +77,7 @@ const RecipeFormView = (props) => {
   return (
     <div>
       {}
-      <Header />
+      <Header setUserStatus={setUserStatus} />
       {page === "/add" ? <h1>Add Recipe</h1> : <h1>Edit Recipe</h1>}
       <RecipeForm
         fullRecipe={fullRecipe}

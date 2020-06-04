@@ -6,10 +6,10 @@ import { fetchFullRecipe, sortInstructions } from "../util/recipeFuncs";
 
 import "../styling/showRecipeView.scss";
 
-const ShowRecipe = (props) => {
-  const { setFullRecipe, fullRecipe } = props;
+const ShowRecipeView = (props) => {
+  const { setFullRecipe, fullRecipe, setUserStatus } = props;
   const recipeId = props.match.params.id;
-  // console.log("showRecipe recipeId", recipeId);
+  console.log("showRecipe recipeId", recipeId);
   useEffect(() => {
     const fetchRecipe = async () => {
       let recipe = await fetchFullRecipe(recipeId);
@@ -20,11 +20,11 @@ const ShowRecipe = (props) => {
   }, []);
   return (
     <div>
-      <Header />
-      <h1>ShowRecipe</h1>
+      <Header setUserStatus={setUserStatus} />
+      <h1>Show Recipe</h1>
       <FullRecipe fullRecipe={fullRecipe} />
     </div>
   );
 };
 
-export default ShowRecipe;
+export default ShowRecipeView;
