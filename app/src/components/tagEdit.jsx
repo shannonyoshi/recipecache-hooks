@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { deleteTag } from "../util/recipeFuncs";
 
 const TagEdit = (props) => {
   const { customTags } = props;
@@ -8,6 +9,11 @@ const TagEdit = (props) => {
   return (
     <div>
       <p>Tag Edit</p>
+      <p className="warning-note">
+        Please note: Editing tags here affects all recipes which contain this
+        tag. Deleting a tag will remove it from all recipes. You can only edit
+        custom tags.
+      </p>
       {customTags.map((tag, index) => (
         <InlineEdit tag={tag} />
       ))}
@@ -27,15 +33,11 @@ const InlineEdit = (props) => {
 
   const removeTag = (e) => {
     console.log("removeTag");
-    // TODO: write this function
+    deleteTag(tag.id);
+    // TODO: finish writing this function
   };
   return (
     <>
-      <p className="warning-note">
-        Please note: Editing tags here affects all recipes which contain this
-        tag. Deleting a tag will remove it from all recipes. You can only edit
-        custom tags.
-      </p>
       {isEdit ? (
         <div>
           <input

@@ -30,6 +30,9 @@
   font-size: 3em;
   color: color(dark);
 }
+.logout-button {
+  @include hidden-button-mixin;
+}
 .inactive-nav {
   @include link-reset;
   color: color(dark);

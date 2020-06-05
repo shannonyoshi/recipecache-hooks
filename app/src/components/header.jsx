@@ -35,7 +35,7 @@ const Header = (props) => {
           activeClassName="active-nav">
           Add Recipe
         </NavLink>
-        <button className="inactive-nav" onClick={logout}>
+        <button className="inactive-nav logout-button" onClick={logout}>
           Log Out
         </button>
       </nav>

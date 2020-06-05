@@ -2,10 +2,17 @@ import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
 
+import { deleteRecipe } from "../util/recipeFuncs";
+
 const fullRecipe = (props) => {
   const { fullRecipe } = props;
   console.log("fullRecipe", fullRecipe);
   // console.log("fullRecipe.instructions length", fullRecipe.instructions.length);
+  const delRecipe = async () => {
+    console.log("deleteRecipe");
+    const response = await deleteRecipe(fullRecipe.id);
+  };
+
   return (
     <div className="recipe-wrapper">
       <h1 className="recipe-title">{fullRecipe.title}</h1>
@@ -57,7 +64,7 @@ const fullRecipe = (props) => {
         <Link to={`/edit/${fullRecipe.id}`}>
           <FontAwesomeIcon icon="edit" className="icon-edit" />
         </Link>
-        <button className="delete-button">
+        <button className="delete-button" onClick={delRecipe}>
           <FontAwesomeIcon icon="trash-alt" className="icon-trash" />
         </button>
       </div>

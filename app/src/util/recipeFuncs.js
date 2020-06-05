@@ -5,7 +5,6 @@ export const sortInstructions = (instructions) => {
   // console.log("sortInstructions instructions", instructions);
 };
 
-//for now userID is hard-coded as 1
 export const fetchTruncRecipes = async () => {
   const response = await fetch(`${URL}/api/recipes/trunc`);
   let data = await response.json();
@@ -61,8 +60,8 @@ export const postPutRecipe = async (recipe) => {
   // console.log("jsonRecipe", jsonRecipe);
   if (recipe.id) {
     try {
-      const response = await fetch(`${URL}/api/recipes/edit`, {
-        method: "POST",
+      const response = await fetch(`${URL}/api/recipes/full`, {
+        method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: jsonRecipe,
       });
@@ -72,7 +71,7 @@ export const postPutRecipe = async (recipe) => {
     }
   } else {
     try {
-      const response = await fetch(`${URL}/api/recipes/add`, {
+      const response = await fetch(`${URL}/api/recipes/full`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: jsonRecipe,
@@ -84,4 +83,27 @@ export const postPutRecipe = async (recipe) => {
   }
 };
 
-// TODO: Functions to write:
+export const deleteRecipe = async (recipeId) => {
+  try {
+    const response = await fetch(`${URL}/api/recipes/full/${recipeId}`, {
+      method: "DELETE",
+    });
+    if (response.ok) {
+      return true;
+    }
+    console.log("response", response);
+  } catch (e) {
+    console.log("delete recipe e", e);
+    return null;
+  }
+};
+
+export const deleteTag = async (tagId) => {
+  try {
+    const response = await fetch(`${URL}/api/recipes/userTags/${tagId}`, {
+      method: "DELETE",
+    });
+  } catch (e) {
+    console.log("e", e);
+  }
+};

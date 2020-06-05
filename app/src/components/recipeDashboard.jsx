@@ -36,7 +36,9 @@ const RecipeDashboard = (props) => {
       {!showRecipes ? (
         <p>Loading Recipes</p>
       ) : (
-        showRecipes.map((recipe) => <RecipeCard recipe={recipe} />)
+        showRecipes.map((recipe) => (
+          <RecipeCard recipe={recipe} key={`r ${recipe.id}`} />
+        ))
       )}
     </div>
   );

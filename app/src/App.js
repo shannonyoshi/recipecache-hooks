@@ -9,8 +9,6 @@ import RecipeFormView from "./views/recipeFormView";
 import TagEditView from "./views/tagEditView";
 import PrivateRoute from "./components/privateRoute";
 
-//TODO: set up private routes/ redirects, fix useEffect for fetching to ensure new recipes show up without having to force page refresh
-
 import { fetchTruncRecipes, fetchUserTags } from "./util/recipeFuncs";
 import { fetchUserStatus } from "./util/authFuncs";
 
@@ -59,7 +57,7 @@ const App = () => {
   const [truncRecipes, setTruncRecipes] = useState([]);
   const [fullRecipe, setFullRecipe] = useState(emptyFullRecipe);
   const [addRecipe, setAddRecipe] = useState(emptyFullRecipe);
-
+  //get user status
   useEffect(() => {
     console.log("USE EFFECT APP, fetch status");
     const fetchStatus = async () => {
@@ -73,7 +71,7 @@ const App = () => {
     };
     fetchStatus();
   }, []);
-
+  //get user data
   useEffect(() => {
     console.log("USE EFFECT APP fetch recipes");
     if (userStatus.isLoggedIn) {
