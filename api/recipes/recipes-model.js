@@ -14,6 +14,8 @@ module.exports = {
   //put
   updateTruncRecipe,
   //tags, instructions, ingredients,
+  //del
+  delRecipe,
 };
 
 //TODO: ADD ERROR HANDLING
@@ -146,6 +148,16 @@ async function addInstructions(instructions, recipeId) {
 
 async function addTagsNewRecipe(allTags, recipeId, userId) {
   //tags that need to be added to "tags" DB
+
+  //TODO: figure out if this is necessary
+  // const userTags = await getUniqueUserTags(userId)
+  // let newCustomTags = []
+  // for(let i=0; i< allTags.length; i++) {
+  //   let currTag = allTags[i]
+  //   if (currTag.id&& userTags.some(tag)=>tag.id===currTag.id)
+  // newCustomTags.push(currTag)
+  // }
+
   const newCustomTags = allTags.filter((tag) => !tag.id);
   let tagIds = [];
   if (newCustomTags.length > 0) {
@@ -159,7 +171,9 @@ async function addTagsNewRecipe(allTags, recipeId, userId) {
   const tagsWRecId = addProperty(tagIds, "recipe_id", recipeId);
   const preppedTags = addProperty(tagsWRecId, "user_id", userId);
   console.log("preppedTags", preppedTags);
-  return await addTagsRecipes(preppedTags);
+  const tagsResponse = await addTagsRecipes(preppedTags);
+  console.log("tagsResponse", tagsResponse);
+  return tagsResponse;
 }
 
 async function updateTruncRecipe(fullRecipe) {
@@ -173,15 +187,21 @@ async function updateTruncRecipe(fullRecipe) {
 
 async function delCustomTag(tagId) {
   const tag = db("tags").where({ id: tagId }).where({ isCustom: 1 });
-  console.log("tag", tag);
+  console.log("tag to delete", tag);
   //TODO: after testing query, delete tag
+}
+
+async function delRecipe(recipeId) {
+  const response = await db("recipes").where({ id: recipeId }).del();
+  console.log("delete response", response);
 }
 
 //helper functions
 
 const addTagsRecipes = async (tags) => {
   try {
-    await db("tags_recipes").insert(tags);
+    const response = await db("tags_recipes").insert(tags);
+    return response;
   } catch (error) {
     console.log("error", error);
     return null;

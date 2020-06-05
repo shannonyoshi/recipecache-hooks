@@ -32,6 +32,83 @@ router.get("/full/:recipeId", async (req, res) => {
   }
 });
 
+//empty fields are not submitted in the recipe, so checking if field is present ensures not trying to add nothing to db
+router.post("/full", async (req, res) => {
+  console.log("ADD req.session", req.session);
+  const userId = req.session.userId;
+  const fullRecipe = req.body;
+  console.log("fullRecipe", fullRecipe);
+  const recipeId = await Recipes.addTruncRecipe(fullRecipe, userId);
+  if (recipeId) {
+    let badResponses = [];
+    //TODO: add bad responses and check them before sending response
+    let response = {};
+    if (fullRecipe.ingredients) {
+      response["ingredients"] = await Recipes.addIngredients(
+        fullRecipe.ingredients,
+        recipeId
+      );
+      if (!response["ingredients"]) {
+        badResponses.push("ingredients");
+      }
+    }
+    if (fullRecipe.instructions) {
+      response["instructions"] = await Recipes.addInstructions(
+        fullRecipe.instructions,
+        recipeId
+      );
+      if (!response["instructions"]) {
+        badResponses.push("instructions");
+      }
+    }
+    if (fullRecipe.tags) {
+      response["tags"] = await Recipes.addTagsNewRecipe(
+        fullRecipe.tags,
+        recipeId,
+        userId
+      );
+      if (!response["tags"]) {
+        badResponses.push("tags");
+      }
+    }
+    console.log("response", response);
+    if (badResponses.length === 0) {
+      res.status(201).json({ recipeId: recipeId });
+    } else {
+      res.status(500).json({
+        message: "An Error occurred, here's what was saved",
+        recipeId: recipeId,
+      });
+    }
+  } else {
+    res.status(500).json({ message: "Something went wrong, please try again" });
+  }
+});
+
+router.put("/full", async (req, res) => {
+  // console.log("req", req);
+  console.log("UPDATE req.session", req.session);
+  const fullRecipe = req.body;
+  console.log("fullRecipe", fullRecipe);
+
+  const recipe = await Recipes.updateTruncRecipe(fullRecipe);
+  console.log("recipe", recipe);
+});
+
+router.delete("/full/:recipeId", async (req, res) => {
+  const recipeId = req.params.recipeId;
+  try {
+    let response = Recipes.delRecipe(recipeId);
+    if (response) {
+      res.status(200).end();
+    } else {
+      res.status(400).end();
+    }
+  } catch (e) {
+    console.log("e", e);
+  }
+});
+
 router.get("/trunc", async (req, res) => {
   const userId = req.session.userId;
   // console.log("GET TRUNC req.session", req.session);
@@ -70,6 +147,11 @@ router.get("/userTags", async (req, res) => {
   }
 });
 
+router.delete("/userTags/:tagId", async (req, res) => {
+  const tagId = req.params.tagId;
+  const response = await Recipes.delRecipe(tagId);
+});
+
 router.get("/standardTags", async (req, res) => {
   try {
     const standardTags = await Recipes.getStandardTags();
@@ -80,55 +162,6 @@ router.get("/standardTags", async (req, res) => {
       message: "An error occurred while trying to retrieve standard tags",
     });
   }
-});
-
-//empty fields are not submitted in the recipe, so checking if field is present ensures not trying to add nothing to db
-router.post("/add", async (req, res) => {
-  console.log("ADD req.session", req.session);
-  const userId = req.session.userId;
-  const fullRecipe = req.body;
-  console.log("fullRecipe", fullRecipe);
-  const recipeId = await Recipes.addTruncRecipe(fullRecipe, userId);
-  if (recipeId) {
-    let badResponses = [];
-    //TODO: add bad responses and check them before sending response
-    if (fullRecipe.ingredients) {
-      const response = await Recipes.addIngredients(
-        fullRecipe.ingredients,
-        recipeId
-      );
-      if (!response) {
-        badResponses.push("ingredients");
-      }
-    }
-    if (fullRecipe.instructions) {
-      responses["instructions"] = await Recipes.addInstructions(
-        fullRecipe.instructions,
-        recipeId
-      );
-    }
-    if (fullRecipe.tags) {
-      responses["tags"] = await Recipes.addTagsNewRecipe(
-        fullRecipe.tags,
-        recipeId,
-        userId
-      );
-    }
-  }
-});
-
-router.post("/edit", async (req, res) => {
-  // console.log("req", req);
-  console.log("UPDATE req.session", req.session);
-  const fullRecipe = req.body;
-  console.log("fullRecipe", fullRecipe);
-
-  const recipe = await Recipes.updateTruncRecipe(fullRecipe);
-  console.log("recipe", recipe);
-});
-
-router.post("/delete", async (req, res) => {
-  const { type, ids } = req.body;
 });
 
 module.exports = router;
