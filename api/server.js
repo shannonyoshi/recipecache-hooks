@@ -6,6 +6,7 @@ const helmet = require("helmet");
 const redisStore = require("connect-redis")(session);
 
 const authRouter = require("./auth/auth-router");
+const fullRecipesRouter = require("./recipes/full-recipes-router");
 const recipesRouter = require("./recipes/recipes-router");
 
 const server = express();
@@ -51,7 +52,9 @@ server.use(
 // };
 
 server.use("/api/auth", authRouter);
-
+//this router is only for full recipe logic
+server.use("/api/full-recipes", fullRecipesRouter);
+//this router handles all other recipe related routes
 server.use("/api/recipes", recipesRouter);
 
 server.get("/", (req, res) => {
