@@ -19,6 +19,7 @@ async function getFull(recipeId) {
     const ingredients = await InstIngr.getIngredients(recipeId);
     const instructions = await InstIngr.getInstructions(recipeId);
     const tags = await Tags.getRecipe(recipeId);
+    console.log('get recipe tags', tags)
     recipe["ingredients"] = ingredients;
     recipe["instructions"] = instructions;
     recipe["tags"] = tags;
@@ -30,13 +31,51 @@ async function getFull(recipeId) {
 }
 
 async function addFull(fullRecipe, userId) {
-  const recipeId = null;
+  let recipeId = null;
+  let response = {};
   try {
     recipeId = await Trunc.add(fullRecipe, userId);
   } catch (e) {
     console.log("e", e);
+    return null
   }
-  // TODO: find this func, already written, but was moved
+    if (recipeId) {
+    if (fullRecipe.ingredients) {
+      response["ingredients"] = await InstIngr.addIngredients(
+        fullRecipe.ingredients,
+        recipeId
+      );
+    }
+    if (fullRecipe.instructions) {
+      response["instructions"] = await InstIngr.addInstructions(
+        fullRecipe.instructions,
+        recipeId
+      );
+    }
+    if (fullRecipe.tags) {
+      response["tags"] = await Tags.addRecipe(
+        fullRecipe.tags,
+        recipeId,
+        userId
+      );
+    }
+    console.log("response", response);
+    return response
+  }
+
+
+  //   if (badResponses.length === 0) {
+  //     res.status(201).json({ recipeId: recipeId });
+  //   } else {
+  //     res.status(500).json({
+  //       message: "An Error occurred, here's what was saved",
+  //       recipeId: recipeId,
+  //     });
+  //   }
+  // } else {
+  //   res.status(500).json({ message: "Something went wrong, please try again" });
+  // }
+
 }
 
 async function updateFull(recipe) {

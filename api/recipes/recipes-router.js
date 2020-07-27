@@ -13,7 +13,7 @@ const Trunc = require("./models/trunc-model");
 
 router.get("/trunc", async (req, res) => {
   const userId = req.session.userId;
-  // console.log("GET TRUNC req.session", req.session);
+  console.log("GET TRUNC");
   let truncatedRecipes = null;
   try {
     truncatedRecipes = await Trunc.getByUser(userId);
@@ -23,6 +23,7 @@ router.get("/trunc", async (req, res) => {
       .status(500)
       .json({ message: "An error occurred while trying to retrieve recipe" });
   }
+  console.log('truncatedRecipes in get trunc', truncatedRecipes)
   if (truncatedRecipes) {
     res.status(200).json({ truncatedRecipes });
   } else {
@@ -35,7 +36,7 @@ router.get("/userTags", async (req, res) => {
   const userId = req.session.userId;
   let userTags = null;
   try {
-    userTags = await Recipes.getUniqueUserTags(userId);
+    userTags = await Tags.getUser(userId);
   } catch (error) {
     console.log("error", error);
     res.status(500).json({

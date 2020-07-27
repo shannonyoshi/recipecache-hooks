@@ -1,4 +1,5 @@
 const db = require("../../data/dbConfig");
+const Tags = require("./tags-model")
 
 module.exports = {
   getByUser,
@@ -12,9 +13,10 @@ async function getByUser(userId) {
   console.log("getTruncated userId", userId);
   try {
     let truncRecipes = await db("recipes").where({ user_id: userId });
+    console.log('truncRecipes in trunc model', truncRecipes)
     for (let index in truncRecipes) {
       const recipeId = truncRecipes[index]["id"];
-      truncRecipes[index]["tags"] = await getRecipeTags(recipeId);
+      truncRecipes[index]["tags"] = await Tags.getRecipe(recipeId);
     }
     return truncRecipes;
   } catch (error) {

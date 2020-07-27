@@ -2,6 +2,7 @@ const router = require("express").Router();
 
 const Recipes = require("./models/recipes-model");
 
+
 /* Endpoints: 
       GET /:recipeId   gets full recipe
       POST /            posts full recipe
@@ -36,53 +37,17 @@ router.post("/", async (req, res) => {
   const userId = req.session.userId;
   const fullRecipe = req.body;
   console.log("fullRecipe", fullRecipe);
-  const added = await Recipes.addFull(fullRecipe, userId);
+  const responseObj = await Recipes.addFull(fullRecipe, userId);
+  if (responseObj){
+    res.status(201).json({message: "Recipe added"})
+  } else {   
+     //trunc recipe not added
+    res.status(500).json({message: "An error occurred when adding the recipe. Please try again"})
 
-  // const recipeId = await Recipes.addTruncRecipe(fullRecipe, userId);
-  // if (recipeId) {
-  //   let badResponses = [];
-  //   //TODO: add bad responses and check them before sending response
-  //   let response = {};
-  //   if (fullRecipe.ingredients) {
-  //     response["ingredients"] = await Recipes.addIngredients(
-  //       fullRecipe.ingredients,
-  //       recipeId
-  //     );
-  //     if (!response["ingredients"]) {
-  //       badResponses.push("ingredients");
-  //     }
-  //   }
-  //   if (fullRecipe.instructions) {
-  //     response["instructions"] = await Recipes.addInstructions(
-  //       fullRecipe.instructions,
-  //       recipeId
-  //     );
-  //     if (!response["instructions"]) {
-  //       badResponses.push("instructions");
-  //     }
-  //   }
-  //   if (fullRecipe.tags) {
-  //     response["tags"] = await Recipes.addTagsNewRecipe(
-  //       fullRecipe.tags,
-  //       recipeId,
-  //       userId
-  //     );
-  //     if (!response["tags"]) {
-  //       badResponses.push("tags");
-  //     }
-  //   }
-  //   console.log("response", response);
-  //   if (badResponses.length === 0) {
-  //     res.status(201).json({ recipeId: recipeId });
-  //   } else {
-  //     res.status(500).json({
-  //       message: "An Error occurred, here's what was saved",
-  //       recipeId: recipeId,
-  //     });
-  //   }
-  // } else {
-  //   res.status(500).json({ message: "Something went wrong, please try again" });
-  // }
+  }
+
+  
+
 });
 
 router.put("/", async (req, res) => {
@@ -91,7 +56,7 @@ router.put("/", async (req, res) => {
   const fullRecipe = req.body;
   console.log("fullRecipe", fullRecipe);
 
-  const recipe = await Recipes.updateTruncRecipe(fullRecipe);
+  const recipe = await Recipes.updateFull(fullRecipe);
   console.log("recipe", recipe);
 });
 
