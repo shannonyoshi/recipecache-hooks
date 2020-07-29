@@ -59,6 +59,7 @@ async function update(fullRecipe) {
   };
   try {
     await db("recipes").where({ id: fullRecipe.id }).update(truncChanges);
+    return true
   } catch (e) {
     console.log("e", e);
     return null;

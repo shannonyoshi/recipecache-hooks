@@ -17,31 +17,10 @@ export const fetchTruncRecipes = async () => {
   }
 };
 
-export const fetchUserTags = async () => {
-  const response = await fetch(`${URL}/api/recipes/userTags`);
-  const jsonResponse = await response.json();
-  // console.log("jsonResponse", jsonResponse);
-  if (!response.ok) {
-    console.log("bad response", response);
-  } else {
-    return jsonResponse.userTags;
-  }
-};
-
-export const fetchStandardTags = async () => {
-  try {
-    const response = await fetch(`${URL}/api/recipes/standardTags`);
-    const jsonResponse = await response.json();
-    return jsonResponse.standardTags;
-  } catch (e) {
-    console.log("e", e);
-  }
-};
-
 export const fetchFullRecipe = async (recipeId) => {
   // console.log("apiFunctions RecipeId", recipeId);
   try {
-    const response = await fetch(`${URL}/api/recipes/full/${recipeId}`);
+    const response = await fetch(`${URL}/api/full-recipes/${recipeId}`);
     const jsonResponse = await response.json();
     // console.log("jsonResponse", jsonResponse);
     if (!response.ok) {
@@ -59,19 +38,21 @@ export const postPutRecipe = async (recipe) => {
   const jsonRecipe = JSON.stringify(recipe);
   // console.log("jsonRecipe", jsonRecipe);
   if (recipe.id) {
+    console.log('put recipe', recipe)
     try {
-      const response = await fetch(`${URL}/api/recipes/full`, {
+      const response = await fetch(`${URL}/api/full-recipes/`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: jsonRecipe,
       });
-      console.log("response", response);
+      console.log("put response", response);
     } catch (e) {
       console.log("e", e);
     }
   } else {
+    console.log('post recipe', recipe)
     try {
-      const response = await fetch(`${URL}/api/recipes/full`, {
+      const response = await fetch(`${URL}/api/full-recipes/`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: jsonRecipe,
@@ -95,15 +76,5 @@ export const deleteRecipe = async (recipeId) => {
   } catch (e) {
     console.log("delete recipe e", e);
     return null;
-  }
-};
-
-export const deleteTag = async (tagId) => {
-  try {
-    const response = await fetch(`${URL}/api/recipes/userTags/${tagId}`, {
-      method: "DELETE",
-    });
-  } catch (e) {
-    console.log("e", e);
   }
 };

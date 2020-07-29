@@ -69,37 +69,60 @@ async function addRecipe(allTags, recipeId, userId) {
   return tagsResponse;
 }
 //EXPORTED: use on recipe put requests
-async function updateRecipe(tagsToUpdate, recipeId, userId){
-  //TODO: complete this for post requests
-  //currentTags = tags already associated with this recipe
-  const currentTags = await getRecipe(recipeId)
-  let currTagIds = currentTags.filter(tag=> tag.id)
-//new custom tags that need to be added to tags table
-  let tagsToCreate = []
-  let tagsToAdd = []
-  for(let i=0; i< tagsToUpdate.length; i++) {
-    if (!tagsToUpdate[i].id) {
-      tagsToCreate.push(tagsToUpdate[i])
+async function updateRecipe(currTags, recipeId, userId){
+  //TODO: check this for post requests
+  //prevTags = tags already associated with this recipe
+  console.log('UPDATE RECIPE TAGS')
+  const prevTags = await getRecipe(recipeId)
+  console.log('prevTags', prevTags)
+  let prevTagIds = prevTags.map(tag=> tag.id)
+  console.log('prevTagIds', prevTagIds)
+//new custom tags that need to be added to "tags" table, then the tags_recipes table
+  let newTags = []
+  //tags to be added to the "tags_recipes" table, but not "tags" table
+  let tagsForTags_Rec = []
+  for(let i=0; i< currTags.length; i++) {
+    if (!currTags[i].id) { //assumes new custom tags do not have valid ID
+      newTags.push(currTags[i])
+      break
     }
-    else if(currentTagIds.includes(tagsToUpdate[i].id)){
-      //removing IDs that are found in both lists makes the final result of currTagIds be tags that need to be removed
-      currTagIds=currTagIds.filter(id=>id!=tagToUpdate[i].id)
+    else if(prevTagIds.includes(currTags[i].id)){
+      //removing IDs that are found in both lists from prevTagIds makes the final result of prevTagIds be tags that need to be removed
+      prevTagIds=prevTagIds.filter(id=>id!==currTags[i].id)
+      console.log('prevTagIds after filter', prevTagIds)
     }
-    else if (!currTagIds.includes(tagsToUpdate[i].id)) {
+    else{
       //finds tags that need to be added to "tags_recipes table"
-      tagsToAdd.push(tagsToUpdate[i].id)
+      //if tag has an id and was not in previous tags
+      tagsForTags_Rec.push(currTags[i].id)
     }
   }
-  let newTagIds = await createCustomTags(tagsToCreate)
-  if (newTagIds) {
-    tagsToAdd= tagsToAdd.concat(newTagIds)
-  }
-  const preppedTags = prepForTagsRecipes(tagsToAdd, recipeId, userId)
-  const added = addToTagsRecipe(preppedTags)
-  if (currTagsIds.length>0) {
-    const removed = removeTagFromRecipe(currTagsIds, recipeId)
+  console.log('newTags', newTags)
 
+  // returns [{tag_id:##}, {tag_id:##}], so concat after formatting other IDs
+  let newTagIds = await createCustomTags(newTags)
+  console.log('tagsForTags_Rec after concat', tagsForTags_Rec)
+  formattedTags = []
+  for(let i=0; i< tagsForTags_Rec.length; i++) {
+    formattedTags.push({tag_id: tagsForTags_Rec[i]})
   }
+  if (newTagIds) {
+    console.log('newTagIds', newTagIds)
+    formattedTags= formattedTags.concat(newTagIds)
+  }
+  console.log('formattedTags', formattedTags)
+  
+  const preppedTags = prepForTagsRecipes(formattedTags, recipeId, userId)
+  console.log('preppedTags', preppedTags)
+  const added = await addToTagsRecipes(preppedTags)
+  console.log('added', added)
+  if (prevTagIds.length>0) {
+    const removed =  await removeTagFromRecipe(prevTagIds, recipeId)
+    console.log('removed', removed)
+  }
+  //These should be removed from "tags_recipes" list
+  console.log('prevTagIds', prevTagIds)
+  console.log('end updateTags function')
 }
 
 //EXPORTED: deletes tag from "tags" DB
@@ -111,12 +134,14 @@ async function delCustomTag(tagId) {
 
 //HELPER: deletes tag from "tags_recipe" table
 async function removeTagFromRecipe(tagIds, recipeId) {
-  const tagsToDelete = await db("tags_recipes").where({recipeId}).whereIn('tag_id',tagIds)
-//TODO: check that the query is functioning as expected, then add delete functionality
+  const deleted = await db("tags_recipes").where({"recipe_id": recipeId}).whereIn('tag_id',tagIds).del()
+  console.log('deleted from removeTagFromRecipe',deleted)
+  return deleted
 }
 
 //HELPER: adds tags to a "tags_recipes" table
 async function addToTagsRecipes(tags) {
+  console.log('tags ADDING TO "tags_recipes', tags)
   try {
     const response = await db("tags_recipes").insert(tags);
     return response;

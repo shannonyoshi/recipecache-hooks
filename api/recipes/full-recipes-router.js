@@ -53,11 +53,17 @@ router.post("/", async (req, res) => {
 router.put("/", async (req, res) => {
   // console.log("req", req);
   console.log("UPDATE req.session", req.session);
+  const userId = req.session.userId
   const fullRecipe = req.body;
   console.log("fullRecipe", fullRecipe);
-
-  const recipe = await Recipes.updateFull(fullRecipe);
-  console.log("recipe", recipe);
+  try{
+    const recipe = await Recipes.updateFull(fullRecipe, userId);
+    console.log("recipe", recipe);
+    res.status(200).json({recipe})
+  } catch(e) {
+    console.log('e', e)
+    res.status(500).end()
+  }
 });
 
 router.delete("/:recipeId", async (req, res) => {

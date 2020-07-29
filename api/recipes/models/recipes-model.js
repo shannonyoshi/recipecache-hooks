@@ -64,22 +64,29 @@ async function addFull(fullRecipe, userId) {
   }
 
 
-  //   if (badResponses.length === 0) {
-  //     res.status(201).json({ recipeId: recipeId });
-  //   } else {
-  //     res.status(500).json({
-  //       message: "An Error occurred, here's what was saved",
-  //       recipeId: recipeId,
-  //     });
-  //   }
-  // } else {
-  //   res.status(500).json({ message: "Something went wrong, please try again" });
-  // }
-
 }
 
-async function updateFull(recipe) {
-  // TODO: write this func
+async function updateFull(updatedRecipe, userId) {
+
+  //things to update: trunc recipe, instructions, ingredients, tags, 
+
+// things to test: Trunc.update(), InstIngr.updateIngredient(), InstIngr.updateInstructions(), Tags.updateRecipe()
+
+  const recipeId = updatedRecipe.id
+
+    const truncUpdated =await Trunc.update(updatedRecipe)
+    console.log('truncUpdated', truncUpdated)
+    const ingrUpdated = await InstIngr.updateIngredients(updatedRecipe.ingredients, recipeId)
+    console.log('ingrUpdated', ingrUpdated)
+    const instUpdated = await InstIngr.updateInstructions(updatedRecipe.instructions, recipeId)
+    console.log('instUpdated', instUpdated)
+    // const tagsUpdated = await Tags.updateRecipe(updatedRecipe.tags, recipeId, userId)
+    // console.log('tagsUpdated', tagsUpdated)
+    // if (truncUpdated && ingrUpdated && instUpdated && tagsUpdated) {
+    //   return true
+    // } else {
+    //   return false
+    // }
 }
 
 

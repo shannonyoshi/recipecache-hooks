@@ -21,6 +21,7 @@ const RecipeForm = (props) => {
     e.preventDefault();
     //assumes that if text is entered in the custom tag input, user wants to add the tag
     const fullTags = fullRecipe.tags;
+    //recipeSubmit should be cleaned and ready to submit after removing empty items
     let recipeSubmit = {
       id: fullRecipe.id,
       title: fullRecipe.title,

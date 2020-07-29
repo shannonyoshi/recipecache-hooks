@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { deleteTag } from "../util/recipeFuncs";
+import { deleteTag } from "../util/tagFuncs";
 
 const TagEdit = (props) => {
   const { customTags } = props;

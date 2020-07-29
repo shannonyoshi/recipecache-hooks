@@ -9,8 +9,9 @@ import RecipeFormView from "./views/recipeFormView";
 import TagEditView from "./views/tagEditView";
 import PrivateRoute from "./components/privateRoute";
 
-import { fetchTruncRecipes, fetchUserTags } from "./util/recipeFuncs";
+import { fetchTruncRecipes } from "./util/recipeFuncs";
 import { fetchUserStatus } from "./util/authFuncs";
+import { fetchUserTags } from "./util/tagFuncs";
 
 //FontAwesome Set Up
 import { library } from "@fortawesome/fontawesome-svg-core";

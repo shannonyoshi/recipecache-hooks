@@ -13,7 +13,9 @@ const ShowRecipeView = (props) => {
   useEffect(() => {
     const fetchRecipe = async () => {
       let recipe = await fetchFullRecipe(recipeId);
-      sortInstructions(recipe.instructions);
+      if (recipe.instructions) {
+        sortInstructions(recipe.instructions);
+      }
       setFullRecipe(recipe);
     };
     fetchRecipe();

@@ -2,24 +2,16 @@ import React, { useEffect, useState } from "react";
 import RecipeForm from "../components/recipeForm";
 import Header from "../components/header";
 
-import { fetchFullRecipe, fetchStandardTags } from "../util/recipeFuncs";
-
+import { fetchFullRecipe } from "../util/recipeFuncs";
+import { fetchStandardTags } from "../util/tagFuncs";
 import "../styling/recipeFormView.scss";
 
 const RecipeFormView = (props) => {
-  console.log("recipeFormView props", props);
+  // console.log("recipeFormView props", props);
   const { setFullRecipe, fullRecipe, userTags, setUserStatus } = props;
   const [allTags, setAllTags] = useState([]);
-  const page = props.match.path;
-  // let recipe = null
-  // let setRecipe=null
-  // if (page === "/add") {
-  //   recipe=props.addRecipe
-  //   setRecipe = props.setAddRecipe
-  // } else {
-  //   recipe = props.fullRecipe,
-  //   setRecipe=props.setFullRecipe
-  // }
+  const page = props.match.path; //either "/add" or "/edit/:recipeId"
+
   const emptyFullRecipe = {
     id: null,
     title: "",
@@ -76,7 +68,6 @@ const RecipeFormView = (props) => {
 
   return (
     <div>
-      {}
       <Header setUserStatus={setUserStatus} />
       {page === "/add" ? <h1>Add Recipe</h1> : <h1>Edit Recipe</h1>}
       <RecipeForm
