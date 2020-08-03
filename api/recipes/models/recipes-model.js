@@ -80,8 +80,8 @@ async function updateFull(updatedRecipe, userId) {
     console.log('ingrUpdated', ingrUpdated)
     const instUpdated = await InstIngr.updateInstructions(updatedRecipe.instructions, recipeId)
     console.log('instUpdated', instUpdated)
-    // const tagsUpdated = await Tags.updateRecipe(updatedRecipe.tags, recipeId, userId)
-    // console.log('tagsUpdated', tagsUpdated)
+    const tagsUpdated = await Tags.updateRecipe(updatedRecipe.tags, recipeId, userId)
+    console.log('tagsUpdated', tagsUpdated)
     // if (truncUpdated && ingrUpdated && instUpdated && tagsUpdated) {
     //   return true
     // } else {

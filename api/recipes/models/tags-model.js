@@ -70,26 +70,22 @@ async function addRecipe(allTags, recipeId, userId) {
 }
 //EXPORTED: use on recipe put requests
 async function updateRecipe(currTags, recipeId, userId){
-  //TODO: check this for post requests
   //prevTags = tags already associated with this recipe
-  console.log('UPDATE RECIPE TAGS')
   const prevTags = await getRecipe(recipeId)
-  console.log('prevTags', prevTags)
   let prevTagIds = prevTags.map(tag=> tag.id)
-  console.log('prevTagIds', prevTagIds)
+
 //new custom tags that need to be added to "tags" table, then the tags_recipes table
-  let newTags = []
+  let newCustTags = []
   //tags to be added to the "tags_recipes" table, but not "tags" table
   let tagsForTags_Rec = []
   for(let i=0; i< currTags.length; i++) {
     if (!currTags[i].id) { //assumes new custom tags do not have valid ID
-      newTags.push(currTags[i])
+      newCustTags.push(currTags[i])
       break
     }
     else if(prevTagIds.includes(currTags[i].id)){
       //removing IDs that are found in both lists from prevTagIds makes the final result of prevTagIds be tags that need to be removed
       prevTagIds=prevTagIds.filter(id=>id!==currTags[i].id)
-      console.log('prevTagIds after filter', prevTagIds)
     }
     else{
       //finds tags that need to be added to "tags_recipes table"
@@ -97,17 +93,18 @@ async function updateRecipe(currTags, recipeId, userId){
       tagsForTags_Rec.push(currTags[i].id)
     }
   }
-  console.log('newTags', newTags)
+  let custTagsAdded = null
+  let newTagForRecAdded=null
+  let delTags=null
 
-  // returns [{tag_id:##}, {tag_id:##}], so concat after formatting other IDs
-  let newTagIds = await createCustomTags(newTags)
-  console.log('tagsForTags_Rec after concat', tagsForTags_Rec)
   formattedTags = []
   for(let i=0; i< tagsForTags_Rec.length; i++) {
     formattedTags.push({tag_id: tagsForTags_Rec[i]})
   }
-  if (newTagIds) {
-    console.log('newTagIds', newTagIds)
+  console.log('newCustTags', newCustTags)
+  if (newCustTags.length>0) {
+    // returns [{tag_id:##}, {tag_id:##}], so concat after formatting other IDs
+    let newTagIds = await createCustomTags(newCustTags)
     formattedTags= formattedTags.concat(newTagIds)
   }
   console.log('formattedTags', formattedTags)
@@ -134,9 +131,15 @@ async function delCustomTag(tagId) {
 
 //HELPER: deletes tag from "tags_recipe" table
 async function removeTagFromRecipe(tagIds, recipeId) {
-  const deleted = await db("tags_recipes").where({"recipe_id": recipeId}).whereIn('tag_id',tagIds).del()
-  console.log('deleted from removeTagFromRecipe',deleted)
-  return deleted
+  try{
+
+    const deleted = await db("tags_recipes").where({"recipe_id": recipeId}).whereIn('tag_id',tagIds).del()
+    console.log('deleted from removeTagFromRecipe',deleted)
+    return true
+  } catch(e) {
+    console.log('e', e)
+    return null
+  }
 }
 
 //HELPER: adds tags to a "tags_recipes" table
@@ -144,7 +147,7 @@ async function addToTagsRecipes(tags) {
   console.log('tags ADDING TO "tags_recipes', tags)
   try {
     const response = await db("tags_recipes").insert(tags);
-    return response;
+    return true;
   } catch (error) {
     console.log("error", error);
     return null;
@@ -161,14 +164,27 @@ function prepForTagsRecipes(tagIds, recipeId, userId) {
 //HELPER: adds array of custom tags to the "tags" table, returns array of tagIds
 async function createCustomTags(tags) {
   const tagIds = [];
+  let errors=false
   for (let i = 0; i < tags.length; i++) {
-    const id = await db("tags").insert({
-      text: tags[i].text,
-      isCustom: tags[i].isCustom,
-    });
-    tagIds.push({ tag_id: id[0] });
+    try{
+
+      const id = await db("tags").insert({
+        text: tags[i].text,
+        isCustom: tags[i].isCustom,
+      });
+      tagIds.push({ tag_id: id[0] });
+    }catch(e) {
+      console.log('e', e)
+      errors = true
+    }
   }
-  return tagIds;
+  if (!errors) {
+    return tagIds;
+  }
+  else {
+    return false
+  }
+
 }
 
 
